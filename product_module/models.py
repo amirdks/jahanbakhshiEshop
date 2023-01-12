@@ -1,0 +1,258 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db import models
+
+# Create your models here.
+from django.db.models import Avg
+from django.utils.text import slugify
+
+
+class ProductCategory(models.Model):
+    title = models.CharField(
+        max_length=300,
+        db_index=True,
+        verbose_name='عنوان'
+    )
+    slug = models.SlugField(
+        default='',
+        blank=True,
+        null=True,
+        db_index=True,
+        verbose_name='عنوان در url'
+    )
+    is_active = models.BooleanField(
+        verbose_name='فعال / غیرفعال'
+    )
+    is_delete = models.BooleanField(
+        verbose_name='حذف شده / نشده'
+    )
+
+    def __str__(self):
+        return f'( {self.title} - {self.slug} )'
+
+    def save(self, *args, **kwargs):  # new
+        self.slug = slugify(self.title, allow_unicode=True)
+        return super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'دسته بندی'
+        verbose_name_plural = 'دسته بندی ها'
+
+
+class ProductBrand(models.Model):
+    title = models.CharField(
+        max_length=300,
+        verbose_name='نام برند',
+        db_index=True
+    )
+    english_title = models.CharField(
+        default='',
+        blank=True,
+        null=True,
+        max_length=300,
+        verbose_name='نام در url',
+        db_index=True
+    )
+    is_active = models.BooleanField(
+        verbose_name='فعال / غیرفعال'
+    )
+
+    class Meta:
+        verbose_name = 'برند'
+        verbose_name_plural = 'برند ها'
+
+    def __str__(self):
+        return self.title
+
+
+class Product(models.Model):
+    title = models.CharField(
+        max_length=300,
+        verbose_name='نام محصول'
+    )
+    category = models.ManyToManyField(
+        'ProductCategory',
+        related_name='product_categories',
+        verbose_name='دسته بندی ها'
+    )
+    image = models.ImageField(
+        upload_to='images/products',
+        verbose_name='تصویر محصول'
+    )
+    brand = models.ForeignKey(
+        'ProductBrand',
+        on_delete=models.CASCADE,
+        related_name='product_brands',
+        verbose_name='برند'
+    )
+    price = models.IntegerField(
+        verbose_name='قیمت'
+    )
+    size = models.CharField(
+        max_length=50,
+        verbose_name='ابعاد'
+    )
+    weight = models.FloatField(
+        verbose_name='وزن'
+    )
+    screen_size = models.CharField(
+        max_length=50,
+        verbose_name='سایز صفحه نمایش'
+    )
+    cpu = models.CharField(
+        max_length=50,
+        verbose_name='پردازنده'
+    )
+    gpu = models.CharField(
+        max_length=50,
+        verbose_name='پردازنده گرافیکی'
+    )
+    camera_resolution = models.IntegerField(
+        verbose_name='رزولوشن دوربین'
+    )
+    software = models.CharField(
+        max_length=50,
+        verbose_name='سیستم عامل'
+    )
+    battery = models.CharField(
+        max_length=50,
+        verbose_name='باطری'
+    )
+    release_date = models.CharField(
+        max_length=50,
+        verbose_name='تاریخ عرضه'
+    )
+    quantity = models.IntegerField(default=1, verbose_name='موجودی')
+    description = models.TextField(
+        verbose_name='توضیحات اصلی',
+        db_index=True,
+    )
+    slug = models.SlugField(
+        default="",
+        blank=True,
+        null=True,
+        db_index=True,
+        max_length=200,
+        unique=True,
+        verbose_name='عنوان در url'
+    )
+    is_active = models.BooleanField(
+        default=False,
+        verbose_name='فعال / غیرفعال'
+    )
+    is_delete = models.BooleanField(
+        verbose_name='حذف شده / نشده'
+    )
+    created_date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='تاریخ قرار گیری محصول',
+        blank=True,
+        null=True,
+    )
+
+    class Meta:
+        verbose_name = 'محصول'
+        verbose_name_plural = 'محصولات'
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):  # new
+        self.slug = slugify(self.title, allow_unicode=True)
+        return super().save(*args, **kwargs)
+
+    def vote_avg(self):
+        if self.productvote_set.first():
+            return round(self.productvote_set.aggregate(vote_avg=Avg('vote')).get('vote_avg'))
+        return 0
+
+class ProductVisit(models.Model):
+    product = models.ForeignKey(
+        'Product',
+        related_name='product_visit',
+        on_delete=models.CASCADE,
+        verbose_name='محصول'
+    )
+    ip = models.CharField(
+        max_length=30,
+        verbose_name='آی پی کاربر'
+    )
+    user = models.ForeignKey(
+        'account_module.User',
+        verbose_name='کاربر',
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return f'{self.product.title} / {self.ip}'
+
+    class Meta:
+        verbose_name = 'بازدید محصول'
+        verbose_name_plural = 'بازدیدهای محصول'
+
+
+class ProductGallery(models.Model):
+    product = models.ForeignKey(
+        'Product',
+        related_name='product_gallery',
+        on_delete=models.CASCADE,
+        verbose_name='محصول',
+    )
+    image = models.ImageField(
+        upload_to='images/product-gallery',
+        verbose_name='تصویر'
+    )
+
+    def __str__(self):
+        return self.product.title
+
+    class Meta:
+        verbose_name = 'تصویر گالری'
+        verbose_name_plural = 'گالری تصاویر'
+
+
+class ProductComment(models.Model):
+    COMMEND_MODES = {
+        ('Good', 'خوب'),
+        ('Bad', 'بد'),
+        ('Poker', 'پوکر'),
+    }
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, verbose_name='برای محصول')
+    user = models.ForeignKey('account_module.User', on_delete=models.CASCADE, verbose_name='کاربر')
+    commend_text = models.TextField(verbose_name='متن کامنت')
+    commend_mode = models.CharField(choices=COMMEND_MODES, max_length=50, verbose_name='مود کامنت')
+    create_date = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ثبت')
+    is_accepted = models.BooleanField(verbose_name='تایید شده توسط ادمین', default=False)
+
+    def __str__(self):
+        return self.user.email
+
+    class Meta:
+        verbose_name = 'نظر'
+        verbose_name_plural = 'نظرات'
+
+
+class ProductVote(models.Model):
+    user = models.ForeignKey(
+        to='account_module.User',
+        verbose_name='کاربر رای دهنده',
+        on_delete=models.CASCADE
+    )
+    product = models.ForeignKey(
+        to='Product',
+        verbose_name='مربوط به محصول',
+        on_delete=models.CASCADE
+    )
+    vote = models.IntegerField(
+        verbose_name='امتیاز',
+        validators=[
+            MaxValueValidator(5, 'نمیتوانید بیشتر از 5 امتیاز برای محصول ثبت کنید'),
+            MinValueValidator(1, 'نمیتوانید کمتر از 1 امتیاز برای محصول ثبت کنید'),
+        ]
+    )
+
+    class Meta:
+        verbose_name = 'امتیاز محصول'
+        verbose_name_plural = 'امتیازات محصول'
+
+    def __str__(self):
+        return self.user.email

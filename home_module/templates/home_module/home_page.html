@@ -1,0 +1,96 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+{% block title %}
+صفحه اصلی
+{% endblock %}
+{% block custom_style %}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/product-list.css' %}">
+{% endblock %}
+{% block content %}
+<section class="email-send">
+    <div class="container">
+        <div class="email-send-content">
+            <p class="email-send-text">جهت اطلاع از جدیدترین تخفیف ها ایمیل خود را وارد کنید و ایمیل خود را با ما به
+                اشتراک بگذارید</p>
+            <form class="email-send-form" action="#">
+                <input type="text" class="form-control email-send-input" placeholder="آدرس ایمیل ...">
+                <input type="submit" class="btn btn-info text-white" value="ثبت نام">
+            </form>
+        </div>
+    </div>
+</section>
+<section class="items-section">
+    <div class="container">
+        <div class="grid-container">
+            <div class="grid-item">
+                <i class="fa-solid fa-truck"></i>
+                <h2>ارسال رایگان</h2>
+                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، </p>
+            </div>
+            <div class="grid-item">
+                <i class="fa-solid fa-tags"></i>
+                <h2>تخفیف زیاد</h2>
+                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحانگرافیک است، </p>
+            </div>
+            <div class="grid-item">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <h2>محصولات زیاد</h2>
+                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحانگرافیک است، </p>
+            </div>
+        </div>
+    </div>
+</section>
+<section style="direction: ltr" class="ftco-section">
+    <div class="products-container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2 class="heading-section mb-5 pb-md-4">جدیدترین محصولات</h2>
+            </div>
+            <div class="col-md-12 bg-white rounded-2">
+                <div class="featured-carousel owl-carousel">
+                    <div class="item">
+                        <div style="direction:rtl;" class="purchase-item">
+                            <div class="purchase-header"><img
+                                    src="{% static 'images/6de67c3df626f9a133a3aa41815b9d7b7619cc60_1665829192.jpg'%}">
+                            </div>
+                            <div class="purchase-text">
+                                گوشی سامسنوگ گلکسی a12
+                            </div>
+                            <div class="purchase-button">
+                                <button class="addtocart">
+                                    <div class="pretext">
+                                        <i class="fas fa-cart-plus"></i> افزودن به سبد خرید
+                                    </div>
+
+                                    <div class="pretext done">
+                                        <div class="posttext"><i class="fas fa-check"></i> اوکبه</div>
+                                    </div>
+
+                                </button>
+                            </div>
+                            <div class="purchase-footer">
+                                <div class="right">5,500,000 تومان</div>
+                                <div class="left"><span> 2.5 </span><i class="fa-solid fa-star"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="poster-container">
+        <div class="poster-section">
+            <div class="poster"><img src="static/images/poster/831580.png" alt=""></div>
+            <div class="poster"><img src="static/images/poster/wallpaperflare.com_wallpaper.jpg" alt=""></div>
+            <div class="poster"><img src="static/images/poster/975650.jpg" alt=""></div>
+            <div class="poster"><img src="static/images/poster/wallpaperflare.com_wallpaper(1).jpg" alt=""></div>
+        </div>
+        <div class="big-poster">
+            <img src="static/images/poster/952062.png" alt="">
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en" dir="rtl">
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% include 'shared/header_references.html' %}
+    {% block custom_style %}{% endblock %}
+</head>
+<body>
+{% include 'shared/site_header_component.html' %}
+{% block content %}{% endblock %}
+{% include 'shared/site_footer_component.html' %}
+{% include 'shared/footer_references.html' %}
+{% block custom_script %}{% endblock %}
+</body>
+</html>

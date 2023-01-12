@@ -1,0 +1,99 @@
+import time
+
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.shortcuts import render
+
+# Create your views here.
+from django.views.generic import ListView, View, DetailView
+
+from order_module.models import Order
+from product_module.models import Product, ProductBrand, ProductGallery, ProductComment, ProductVote
+
+
+class ProductListView(View):
+    def get(self, request):
+        products = Product.objects.filter(is_delete=False, is_active=True)
+        products = self.filter(request, products)
+        products = self.pagination(request, products)
+        context = {'products': products, 'brands': ProductBrand.objects.filter(is_active=True)}
+        return render(request, 'product_module/products_list.html', context=context)
+
+    def filter(self, request, products):
+        if request.GET.get('brand'):
+            products = products.filter(brand__english_title=request.GET.get('brand'))
+        search = request.GET.get('search')
+        if search:
+            products = products.filter(Q(title__contains=search) | Q(brand__english_title__contains=search) | Q(
+                brand__title__contains=search) |
+                                       Q(category__title__contains=search))
+        if request.GET.get('available-checkbox') and request.GET.get('available-checkbox') == 'true':
+            products = products.filter(quantity__gt=0)
+        return products
+
+    def pagination(self, request, products):
+        paginator = Paginator(products, 5)  # Show 25 contacts per page.
+        page_number = request.GET.get('page', 1)
+        products = paginator.get_page(page_number)
+        return products
+
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'product_module/product-detail.html'
+    context_object_name = 'product'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductDetailView, self).get_context_data(**kwargs)
+        product: Product = context.get('product')
+        context['gallery'] = ProductGallery.objects.filter(product_id=product.id)
+        context['comments'] = ProductComment.objects.filter(product_id=product.id, is_accepted=True)
+        context['order'] = Order.objects.prefetch_related('orderdetail_set').filter(user_id=self.request.user.id,
+                                                                                    is_paid=False,
+                                                                                    orderdetail__product_id=product.id)
+        context['related_products'] = Product.objects.filter(
+            Q(brand__title__iexact=product.brand.title) | Q(
+                category__title__iexact=product.category.first().title)).exclude(id=product.id)
+        if self.request.user.is_authenticated:
+            try:
+                user_vote = ProductVote.objects.get(user_id=self.request.user,
+                                                    product_id=product.id)
+                user_vote = user_vote.vote
+            except ProductVote.DoesNotExist:
+                user_vote = 0
+            context['user_vote'] = user_vote
+        return context
+
+    def post(self, request: HttpRequest, slug):
+        if not request.user.is_authenticated:
+            return JsonResponse({'status': 'error', 'message': 'شما ابتدا باید در حساب کاربری خود لاگین کنید'})
+        try:
+            product = Product.objects.get(slug__iexact=slug)
+        except Product.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'محصول مورد نظر شما یافت نشد'})
+        if request.POST.get('star'):
+            try:
+                recent_vote = ProductVote.objects.get(product_id=product.id, user_id=request.user.id)
+                recent_vote.vote = request.POST.get('star')
+                recent_vote.save()
+            except ProductVote.DoesNotExist:
+                ProductVote.objects.create(product_id=product.id, user_id=request.user.id,
+                                           vote=request.POST.get('star'))
+            time.sleep(1)
+            vote_avg = product.vote_avg()
+            return JsonResponse({'status': 'success', 'message': 'امتیاز شما ثبت شد', 'vote_avg':vote_avg})
+        user_commends = ProductComment.objects.filter(user_id=request.user.id, product_id=product.id,
+                                                      is_accepted=False).count()
+        if user_commends > 2:
+            return JsonResponse({'status': 'error',
+                                 'message': 'بیشتر از این تعدا کامنت نمیتوانید ثبت کنید باید منتظر تایید نظر های قبلی تان باشید'})
+        commend_text = request.POST.get('commend_text')
+        commend_mode = request.POST.get('idea')
+        if commend_mode is None or commend_mode is None:
+            return JsonResponse({'status': 'error', 'message': 'حتما باید یک نظر و یک مود ثبت کنید'})
+        ProductComment.objects.create(product_id=product.id, user_id=request.user.id,
+                                      commend_mode=commend_mode, commend_text=commend_text)
+        time.sleep(1)
+        return JsonResponse(
+            {'status': 'success', 'message': 'نظر شما با موفقیت ثبت شد بعد از تایید ادمین در سایت قرار میگیرد'})
