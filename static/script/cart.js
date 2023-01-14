@@ -30,7 +30,7 @@ function changeCount(type, id, orderId) {
                     }
                     $(`#total-amount-${id}`).html(formatter.format(res.total))
                     $('#total-cart-amount').html(formatter.format(res.total_amount + 15000))
-                    $('#total-cart-2-amount').html(formatter.format(res.total_amount))
+                    $('#total-cart-2-amount').html(formatter.format(res.total_products))
                 } else if (res.status === 'error') {
                     console.log('ridi dabsh')
                 }
@@ -68,7 +68,7 @@ function deleteProduct(id) {
                 $(`#cart-product-${id}`).fadeOut(1000)
                 $(`#total-amount-${id}`).html(formatter.format(res.total))
                 $('#total-cart-amount').html(formatter.format(res.total_amount + 15000))
-                $('#total-cart-2-amount').html(formatter.format(res.total_amount))
+                $('#total-cart-2-amount').html(formatter.format(res.total_products))
                 showNotification(res, 'موفق')
             } else if (res.status === 'error') {
                 showNotification(res, 'شکست')
@@ -79,3 +79,33 @@ function deleteProduct(id) {
         }
     })
 }
+
+let couponForm = $('#coupon-form');
+couponForm.submit(function (e) {
+    e.preventDefault()
+    let cookie = document.cookie
+    let csrfToken = cookie.substring(cookie.indexOf('=') + 1)
+    $.ajax({
+        method: "POST",
+        url: e.target.action,
+        data: {
+            type: 'coupon',
+            coupon_code: $('#coupon-code-input').val()
+        },
+        headers: {
+            'X-CSRFToken': csrfToken
+        },
+        success: function (res) {
+            if (res.status === 'success') {
+                $('#total-cart-amount').html(formatter.format(res.total_amount + 15000))
+                $('#discount-price').html(formatter.format(res.discount_price))
+                showNotification(res, 'موفق')
+            } else if (res.status === 'error') {
+                showNotification(res, 'شکست')
+            }
+        },
+        error: function (res) {
+            console.log('not okab')
+        }
+    })
+})

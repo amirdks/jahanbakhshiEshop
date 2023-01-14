@@ -36,3 +36,8 @@ class ProductGalleryAdmin(admin.ModelAdmin):
 @admin.register(ProductVote)
 class ProductVoteAdmin(admin.ModelAdmin):
     list_display = ['user', 'product', 'vote']
+
+
+@admin.register(ProductCoupon)
+class ProductCouponAdmin(admin.ModelAdmin):
+    list_display = ['coupon_code', 'discount_type']

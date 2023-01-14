@@ -15,7 +15,7 @@ hr {
 
 #category {
     grid-area: category;
-    background-color: #906090;
+    background-color: #c78df6;
 }
 
 #category .container {
@@ -36,13 +36,16 @@ hr {
 
 #category ul li a {
     text-decoration: none;
-    color: white;
+    color: black;
     font-size: 1rem;
+}
+#category ul li a:hover {
+    color: white;
 }
 
 #sidebar {
     grid-area: sidebar;
-    background-color: #c364af;
+    background-color: #A555EC;
     width: 100%;
     /*width: 100%;*/
 

@@ -3,7 +3,8 @@
     /*height: 100vh;*/
     display: grid;
     grid-template-areas:
-    "cart-products-container cart-products-container cart-purchase-price-container";
+    "cart-products-container cart-products-container cart-purchase-price-container"
+    "cart-products-container cart-products-container cart-coupon-container";
     min-height: 80vh;
 }
 
@@ -121,6 +122,11 @@
     background-color: #cc25a9;
     color: white;
 }
+.cart-coupon-container{
+    grid-area: cart-coupon-container;
+    background-color: white;
+    /*margin: 5px;*/
+}
 
 @media only screen and (max-width: 768px) {
     .cart-background-container {
@@ -128,7 +134,8 @@
     "cart-products-container cart-products-container cart-products-container"
     "cart-purchase-price-container cart-purchase-price-container cart-purchase-price-container";
     }
-    .cart-product-picture img{
+
+    .cart-product-picture img {
         width: 90%;
     }
 }
