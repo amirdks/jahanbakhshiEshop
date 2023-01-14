@@ -99,6 +99,7 @@ a:hover {
 .navbar-buttons {
     padding-bottom: .6rem;
 }
+
 .button-36 {
     background-image: linear-gradient(92.88deg, #455EB5 9.16%, #5643CC 43.89%, #673FD7 64.72%);
     cursor: pointer;
@@ -111,13 +112,15 @@ a:hover {
     box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
     transform: scale(1.02);
 }
+
 #login-btn {
     background-image: linear-gradient(92.88deg, #a2b2de 9.16%, #c1bfe1 43.89%, #c1bbd5 64.72%);
     border: none;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
-#login-btn a{
+
+#login-btn a {
     color: #3e0fa4;
 }
 
@@ -137,20 +140,22 @@ a:hover {
 /*}*/
 
 
-
 .cart-shopping-icon {
     font-size: 1.7rem;
     margin-right: 50px;
     margin-top: 10px;
 }
+
 .cart-user-icon {
     font-size: 1.7rem;
     margin-right: 50px;
     margin-top: 10px;
 }
-.cart-user-icon i{
+
+.cart-user-icon i {
     transition: .5s color;
 }
+
 .cart-user-icon i:hover {
     color: #698cf2;
 }
@@ -162,7 +167,8 @@ a:hover {
 .cart-shopping-icon i:hover {
     color: deepskyblue;
 }
-.logout-shopping-icon i:hover{
+
+.logout-shopping-icon i:hover {
     color: lightcoral;
 }
 
@@ -311,5 +317,14 @@ footer {
 @media (min-width: 768px) {
     .button-36 {
         padding: 0 2.6rem;
+    }
+}
+@media screen and (max-width: 992px) {
+    .hr-lines:before {
+        width: 80px;
+    }
+
+    .hr-lines:after {
+        width: 80px;
     }
 }

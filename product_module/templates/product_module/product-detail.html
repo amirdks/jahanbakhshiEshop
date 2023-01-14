@@ -11,11 +11,12 @@
 {% endblock %}
 {% block content %}
     <section class="product-container">
-        <div class="product-detail-container row row-cols-3">
+        <div class="product-detail-container row row-cols-1 row-cols-lg-3">
             <div class="product-image-container">
                 <div class="product-image"><img src="{{ product.image.url }}"
                                                 alt="product-image"></div>
-                <a class="btn btn-primary m-2 d-block w-25 mx-auto" id="show_large_image_modal" href="{{ product.image.url }}"
+                <a class="btn btn-primary m-2 d-block w-25 mx-auto" id="show_large_image_modal"
+                   href="{{ product.image.url }}"
                    data-lightbox="product-image">
                     بزرگنمایـی
                 </a>

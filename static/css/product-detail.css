@@ -298,3 +298,33 @@
     opacity: 0;
     pointer-events: none;
 }
+
+@media screen and (max-width: 992px) {
+    .product-detail div {
+        height: 3rem;
+        margin: 5px;
+        border: 1px solid #6c757d;
+        border-radius: 5px;
+        padding-top: 5px;
+        padding-right: 5px;
+    }
+
+    .product-detail-title {
+        width: calc(40% - 10px);
+    }
+
+    .product-detail-content {
+        width: calc(60% - 10px);
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .product-detail-text-logo i {
+        font-size: 1.8rem;
+    }
+}
+@media screen and (max-width: 992px ) {
+    .product-image img {
+        height: 250px;
+    }
+}
