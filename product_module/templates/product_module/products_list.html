@@ -13,11 +13,10 @@
         <section id="category">
             <div class="container h-100">
                 <ul>
-                    <li><a href="#">موبایل و کالای دیجیتال</a></li>
-                    <li><a href="#">لپ‌تاپ، کامپیوتر، اداری</a></li>
-                    <li><a href="#">لوازم خانگی</a></li>
-                    <li><a href="#">صوتی و تصویری</a></li>
-                    <li><a href="#">خودرو و سایر وسایل نقلیه</a></li>
+                    {% for category in categories %}
+                        <li><a href="{% url 'product_categories_list' cat=category.slug %}">{{ category.title }}</a>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
         </section>
@@ -97,36 +96,41 @@
             </div>
         </aside>
         <article id="product-list-container" class="purchase-container">
-            {% for product in products %}
-                <div onclick="goToDetailPage('{% url 'product_detail_view' slug=product.slug %}')" class="purchase-item">
-                    <div class="purchase-header">
-                        <div>
-                            {% thumbnail product.image "400x400" crop="center" quality=95 as im %}
-                                <img src="{{ im.url }}" alt="product-image">
-                            {% endthumbnail %}
+            {% if products %}
+                {% for product in products %}
+                    <div onclick="goToDetailPage('{% url 'product_detail_view' slug=product.slug %}')"
+                         class="purchase-item">
+                        <div class="purchase-header">
+                            <div>
+                                {% thumbnail product.image "400x400" crop="center" quality=95 as im %}
+                                    <img src="{{ im.url }}" alt="product-image">
+                                {% endthumbnail %}
+                            </div>
+                        </div>
+                        <div class="purchase-text">
+                            {{ product.title }}
+                        </div>
+                        <div class="purchase-button">
+                            <button class="addtocart">
+                                <div class="pretext">
+                                    <i class="fas fa-cart-plus"></i> افزودن به سبد خرید
+                                </div>
+
+                                <div class="pretext done">
+                                    <div class="posttext"><i class="fas fa-check"></i> اضافه شد</div>
+                                </div>
+
+                            </button>
+                        </div>
+                        <div class="purchase-footer">
+                            <div class="right">{{ product.price|three_digits_currency }}</div>
+                            <div class="left"><span> 2.5 </span><i class="fa-solid fa-star"></i></div>
                         </div>
                     </div>
-                    <div class="purchase-text">
-                        {{ product.title }}
-                    </div>
-                    <div class="purchase-button">
-                        <button class="addtocart">
-                            <div class="pretext">
-                                <i class="fas fa-cart-plus"></i> افزودن به سبد خرید
-                            </div>
-
-                            <div class="pretext done">
-                                <div class="posttext"><i class="fas fa-check"></i> اضافه شد</div>
-                            </div>
-
-                        </button>
-                    </div>
-                    <div class="purchase-footer">
-                        <div class="right">{{ product.price|three_digits_currency }}</div>
-                        <div class="left"><span> 2.5 </span><i class="fa-solid fa-star"></i></div>
-                    </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+                {% else %}
+                <p class="text-danger">هیچ محصولی یافت نشد</p>
+            {% endif %}
         </article>
         <section class="pagination-container">
             <div class="pagination-content">

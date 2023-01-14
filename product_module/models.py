@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import Avg
 from django.utils.text import slugify
 
-from product_module.validators import valid_pct, coupon_code_validator
+from utils.unique_slug_generator import unique_slug_generator
 
 
 class ProductCategory(models.Model):
@@ -19,6 +19,8 @@ class ProductCategory(models.Model):
         blank=True,
         null=True,
         db_index=True,
+        allow_unicode=True,
+        unique=True,
         verbose_name='عنوان در url'
     )
     is_active = models.BooleanField(
@@ -32,7 +34,8 @@ class ProductCategory(models.Model):
         return f'( {self.title} - {self.slug} )'
 
     def save(self, *args, **kwargs):  # new
-        self.slug = slugify(self.title, allow_unicode=True)
+        if not self.slug:
+            self.slug = unique_slug_generator(self)
         return super().save(*args, **kwargs)
 
     class Meta:
@@ -135,6 +138,7 @@ class Product(models.Model):
         db_index=True,
         max_length=200,
         unique=True,
+        allow_unicode=True,
         verbose_name='عنوان در url'
     )
     is_active = models.BooleanField(
@@ -159,7 +163,8 @@ class Product(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):  # new
-        self.slug = slugify(self.title, allow_unicode=True)
+        if not self.slug:
+            self.slug = unique_slug_generator(self)
         return super().save(*args, **kwargs)
 
     def vote_avg(self):
@@ -259,28 +264,3 @@ class ProductVote(models.Model):
 
     def __str__(self):
         return self.user.email
-
-
-class ProductCoupon(models.Model):
-    DISCOUNT_TYPES = {
-        ('Percent', 'درصدی'),
-        ('Price', 'قیمتی'),
-    }
-    coupon_code = models.CharField(max_length=10, validators=[coupon_code_validator], verbose_name='کد کوپن')
-    discount_percent = models.CharField(blank=True, null=True, max_length=4, validators=[valid_pct],
-                                        help_text='حتما از علامت (٪) در اخر استفاده کنید', verbose_name='درصد تخفیف')
-    discount_price = models.PositiveIntegerField(blank=True, null=True, verbose_name='مقدار قیمتی تخفیف')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='زمان ساخت')
-    expires_date = models.DateTimeField(verbose_name='تاریخ انقضا')
-    discount_type = models.CharField(choices=DISCOUNT_TYPES, max_length=8, verbose_name='نوع کوپن')
-
-    class Meta:
-        verbose_name = 'کوپن تخفیف'
-        verbose_name_plural = 'کوپن های تخفیف'
-
-    def __str__(self):
-        return self.coupon_code
-
-    @property
-    def get_discount_percent(self):
-        return float(self.discount_percent.strip('%'))

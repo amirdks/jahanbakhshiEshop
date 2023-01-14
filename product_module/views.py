@@ -9,18 +9,23 @@ from django.shortcuts import render
 from django.views.generic import ListView, View, DetailView
 
 from order_module.models import Order
-from product_module.models import Product, ProductBrand, ProductGallery, ProductComment, ProductVote
+from product_module.models import Product, ProductBrand, ProductGallery, ProductComment, ProductVote, ProductCategory
 
 
 class ProductListView(View):
-    def get(self, request):
-        products = Product.objects.filter(is_delete=False, is_active=True)
-        products = self.filter(request, products)
+    def get(self, request, **kwargs):
+        cat = kwargs.get('cat')
+        products = Product.objects.filter(is_delete=False, is_active=True).order_by('-created_date')
+        products = self.filter(request, products, cat)
         products = self.pagination(request, products)
-        context = {'products': products, 'brands': ProductBrand.objects.filter(is_active=True)}
+        categories = ProductCategory.objects.filter(is_active=True, is_delete=False)
+        context = {'products': products, 'brands': ProductBrand.objects.filter(is_active=True),
+                   'categories': categories}
         return render(request, 'product_module/products_list.html', context=context)
 
-    def filter(self, request, products):
+    def filter(self, request, products, cat=None):
+        if cat is not None:
+            products = products.filter(category__slug__iexact=cat)
         if request.GET.get('brand'):
             products = products.filter(brand__english_title=request.GET.get('brand'))
         search = request.GET.get('search')
@@ -82,7 +87,7 @@ class ProductDetailView(DetailView):
                                            vote=request.POST.get('star'))
             time.sleep(1)
             vote_avg = product.vote_avg()
-            return JsonResponse({'status': 'success', 'message': 'امتیاز شما ثبت شد', 'vote_avg':vote_avg})
+            return JsonResponse({'status': 'success', 'message': 'امتیاز شما ثبت شد', 'vote_avg': vote_avg})
         user_commends = ProductComment.objects.filter(user_id=request.user.id, product_id=product.id,
                                                       is_accepted=False).count()
         if user_commends > 2:
