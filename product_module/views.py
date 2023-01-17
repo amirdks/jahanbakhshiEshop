@@ -13,8 +13,7 @@ from product_module.models import Product, ProductBrand, ProductGallery, Product
 
 
 class ProductListView(View):
-    def get(self, request, **kwargs):
-        cat = kwargs.get('cat')
+    def get(self, request, cat=None):
         products = Product.objects.filter(is_delete=False, is_active=True).order_by('-created_date')
         products = self.filter(request, products, cat)
         products = self.pagination(request, products)

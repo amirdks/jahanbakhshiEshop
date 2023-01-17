@@ -1,12 +1,15 @@
+from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, HttpRequest, JsonResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpRequest, JsonResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import UpdateView
+import weasyprint
 
 from account_module.forms import RegisterForm, LoginForm, EditUserInfoForm, EditUserPasswordForm
 from account_module.models import User
@@ -73,7 +76,6 @@ class OrderHistoryView(LoginRequiredMixin, View):
         orders = Order.objects.prefetch_related('orderdetail_set', 'orderdetail_set__product').filter(
             user_id=request.user.id,
             is_paid=True)
-        print(orders)
         context = {'orders': orders}
         return render(request, 'account_module/order_history.html', context)
 
@@ -112,3 +114,19 @@ class EditUserPasswordView(LoginRequiredMixin, View):
             else:
                 form.add_error('current_password', 'کلمه عبور وارد شده اشتباه می باشد')
         return render(request, 'account_module/edit_user_password.html', {'user': user, 'form': form})
+
+
+class OrderHistoryExportView(View):
+    def get(self, request, order_id):
+        try:
+            order = Order.objects.prefetch_related('orderdetail_set', 'orderdetail_set__product').get(id=order_id,
+                                                                                                    is_paid=True)
+        except Order.DoesNotExist:
+            return Http404('سفارش مورد نظر یافت نشد')
+        html_file = render_to_string('account_module/components/pdf.html', context={'order': order})
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'order-{order.id}'
+        weasyprint.HTML(string=html_file).write_pdf(response, stylesheets=[weasyprint.CSS(
+            str(settings.STATICFILES_DIRS[0]) + '/css/pdf.css'
+        )])
+        return response

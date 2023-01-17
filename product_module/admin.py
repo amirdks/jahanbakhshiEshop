@@ -13,9 +13,17 @@ class ProductBrandAdmin(admin.ModelAdmin):
     pass
 
 
+class ProductGalleryInline(admin.TabularInline):
+    model = ProductGallery
+    raw_id_fields = ['product']
+    extra = 1
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    pass
+    inlines = [
+        ProductGalleryInline
+    ]
 
 
 @admin.register(ProductVisit)

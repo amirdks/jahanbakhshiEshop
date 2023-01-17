@@ -3,7 +3,7 @@ import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpRequest, HttpResponseForbidden
 from django.shortcuts import render
-
+from django.views.decorators.http import require_POST
 # Create your views here.
 from django.utils.safestring import mark_safe
 from django.views import View
@@ -75,42 +75,40 @@ class CartView(LoginRequiredMixin, View):
             return JsonResponse({'status': 'error'})
 
 
+@require_POST
 def add_product_to_order(request: HttpRequest):
-    if request.method == 'POST':
-        product_id = int(request.POST.get('product_id'))
-        count = int(request.POST.get('count'))
-        if count < 1:
-            # count = 1
-            return JsonResponse({
-                'status': 'error',
-                'message': 'مقدار وارد شده معتبر نمی باشد',
-            })
+    product_id = int(request.POST.get('product_id'))
+    count = int(request.POST.get('count'))
+    if count < 1:
+        # count = 1
+        return JsonResponse({
+            'status': 'error',
+            'message': 'مقدار وارد شده معتبر نمی باشد',
+        })
 
-        if request.user.is_authenticated:
-            product = Product.objects.filter(id=product_id, is_active=True, is_delete=False).first()
-            if product is not None and product.quantity > 0:
-                current_order, created = Order.objects.get_or_create(is_paid=False, user_id=request.user.id)
-                current_order_detail = current_order.orderdetail_set.filter(product_id=product_id).first()
-                if current_order_detail is not None:
-                    current_order_detail.count += count
-                    current_order_detail.save()
-                else:
-                    new_detail = OrderDetail(order_id=current_order.id, product_id=product_id, count=count)
-                    new_detail.save()
-
-                return JsonResponse({
-                    'status': 'success',
-                    'message': 'محصول مورد نظر با موفقیت به سبد خرید شما اضافه شد',
-                })
+    if request.user.is_authenticated:
+        product = Product.objects.filter(id=product_id, is_active=True, is_delete=False).first()
+        if product is not None and product.quantity > 0:
+            current_order, created = Order.objects.get_or_create(is_paid=False, user_id=request.user.id)
+            current_order_detail = current_order.orderdetail_set.filter(product_id=product_id).first()
+            if current_order_detail is not None:
+                current_order_detail.count += count
+                current_order_detail.save()
             else:
-                return JsonResponse({
-                    'status': 'not_found',
-                    'message': 'محصول مورد نظر یافت نشد',
-                })
+                new_detail = OrderDetail(order_id=current_order.id, product_id=product_id, count=count)
+                new_detail.save()
+
+            return JsonResponse({
+                'status': 'success',
+                'message': 'محصول مورد نظر با موفقیت به سبد خرید شما اضافه شد',
+            })
         else:
             return JsonResponse({
-                'status': 'error',
-                'message': 'برای افزودن محصول به سبد خرید ابتدا می بایست وارد سایت شوید',
+                'status': 'not_found',
+                'message': 'محصول مورد نظر یافت نشد',
             })
     else:
-        return HttpResponseForbidden('شما اجازه ی ورود به این صفحه را ندارید 403')
+        return JsonResponse({
+            'status': 'error',
+            'message': 'برای افزودن محصول به سبد خرید ابتدا می بایست وارد سایت شوید',
+        })

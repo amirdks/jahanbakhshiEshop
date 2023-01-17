@@ -27,15 +27,17 @@
             </div>
         {% else %}
             <div class="d-flex">
-            <div class="cart-user-icon">
-                <a target="_blank" href="{% url 'user_panel_view' %}"><i class="fa-solid fa-user"></i></a>
-            </div>
-            <div class="cart-shopping-icon">
-                <a target="_blank" href="{% url 'cart_view' %}"><i class="fa-solid fa-cart-shopping"></i></a>
-            </div>
-            <div class="cart-shopping-icon logout-shopping-icon">
-                <a href="{% url 'logout_view' %}"><i class="fa-solid fa-right-from-bracket"></i></a>
-            </div>
+                <div class="cart-user-icon">
+                    <a target="_blank" href="{% url 'user_panel_view' %}"><i class="fa-solid fa-user"></i></a>
+                </div>
+                <div class="cart-shopping-icon">
+                    {% if order_details_count %}
+                        <span class="badge badge-danger">{{ order_details_count }}</span>
+                    {% endif %} <a target="_blank" href="{% url 'cart_view' %}"><i class="fa-solid fa-cart-shopping"></i></a>
+                </div>
+                <div class="cart-shopping-icon logout-shopping-icon">
+                    <a href="{% url 'logout_view' %}"><i class="fa-solid fa-right-from-bracket"></i></a>
+                </div>
             </div>
         {% endif %}
     </div>

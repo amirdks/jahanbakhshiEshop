@@ -167,7 +167,9 @@ a:hover {
 .cart-shopping-icon i:hover {
     color: deepskyblue;
 }
-
+.cart-shopping-icon span{
+    font-size: 10px;
+}
 .logout-shopping-icon i:hover {
     color: lightcoral;
 }

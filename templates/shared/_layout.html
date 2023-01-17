@@ -1,3 +1,4 @@
+{% load render_partial %}
 <!doctype html>
 <html lang="en" dir="rtl">
 <head>
@@ -8,7 +9,7 @@
     {% block custom_style %}{% endblock %}
 </head>
 <body>
-{% include 'shared/site_header_component.html' %}
+{% render_partial 'home_module.views.site_header_component' %}
 {% block content %}{% endblock %}
 {% include 'shared/site_footer_component.html' %}
 {% include 'shared/footer_references.html' %}

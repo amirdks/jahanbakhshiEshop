@@ -159,6 +159,7 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'محصول'
         verbose_name_plural = 'محصولات'
+        index_together = (('id', 'slug'),)
 
     def __str__(self):
         return self.title
@@ -253,6 +254,7 @@ class ProductVote(models.Model):
     )
     vote = models.IntegerField(
         verbose_name='امتیاز',
+        db_index=True,
         validators=[
             MaxValueValidator(5, 'نمیتوانید بیشتر از 5 امتیاز برای محصول ثبت کنید'),
             MinValueValidator(1, 'نمیتوانید کمتر از 1 امتیاز برای محصول ثبت کنید'),
@@ -272,7 +274,7 @@ class ProductCoupon(models.Model):
         ('Percent', 'درصدی'),
         ('Price', 'قیمتی'),
     }
-    coupon_code = models.CharField(max_length=10, validators=[coupon_code_validator], verbose_name='کد کوپن')
+    coupon_code = models.CharField(max_length=10,db_index=True ,validators=[coupon_code_validator], verbose_name='کد کوپن')
     discount_percent = models.CharField(blank=True, null=True, max_length=4, validators=[valid_pct],
                                         help_text='حتما از علامت (٪) در اخر استفاده کنید', verbose_name='درصد تخفیف')
     discount_price = models.PositiveIntegerField(blank=True, null=True, verbose_name='مقدار قیمتی تخفیف')
