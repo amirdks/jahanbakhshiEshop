@@ -51,7 +51,7 @@
                         <div class="purchase d-flex justify-content-center align-items-center">
                             {% if product.quantity > 0 %}
                                 {% if not order %}
-                                    <div class="purchase-button">
+                                    <div class="purchase-button main">
                                         <button class="addtocart addtocart2">
                                             <div onclick="addToCart({{ product.id }})" class="pretext">
                                                 <i class="fas fa-cart-plus"></i> افزودن به سبد خرید
@@ -315,8 +315,8 @@
                 success: function (res) {
                     if (res.status === 'success') {
                         showNotification(res, 'موفق')
-                        $('.purchase-button').fadeOut(700, function () {
-                            $('.purchase-button').html(` <a href="{% url 'cart_view' %}">
+                        $('.purchase-button.main').fadeOut(700, function () {
+                            $('.purchase-button.main').html(` <a href="{% url 'cart_view' %}">
                                     <button class="addtocart addtocart2">
                                         <div class="text-white">رفتن به سبد خرید</div>
                                     </button>

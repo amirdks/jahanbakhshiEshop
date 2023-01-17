@@ -10,6 +10,7 @@ from django.views.generic import ListView, View, DetailView
 
 from order_module.models import Order
 from product_module.models import Product, ProductBrand, ProductGallery, ProductComment, ProductVote, ProductCategory
+from product_module.recommender import Recommender
 
 
 class ProductListView(View):
@@ -59,6 +60,8 @@ class ProductDetailView(DetailView):
         context['related_products'] = Product.objects.filter(
             Q(brand__title__iexact=product.brand.title) | Q(
                 category__title__iexact=product.category.first().title)).exclude(id=product.id)
+        # recommender = Recommender()
+        # context['related_products'] = recommender.suggest_products_for([product], 6)
         if self.request.user.is_authenticated:
             try:
                 user_vote = ProductVote.objects.get(user_id=self.request.user,
