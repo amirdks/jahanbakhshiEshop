@@ -3,6 +3,7 @@ from django.db import models
 
 # Create your models here.
 from django.db.models import Avg
+from django.urls import reverse
 from django.utils.text import slugify
 
 from product_module.validators import coupon_code_validator, valid_pct
@@ -174,6 +175,9 @@ class Product(models.Model):
             return round(self.productvote_set.aggregate(vote_avg=Avg('vote')).get('vote_avg'))
         return 0
 
+    def get_absolute_url(self):
+        return reverse('product_detail_view', kwargs={'slug': self.slug})
+
 
 class ProductVisit(models.Model):
     product = models.ForeignKey(
@@ -274,7 +278,8 @@ class ProductCoupon(models.Model):
         ('Percent', 'درصدی'),
         ('Price', 'قیمتی'),
     }
-    coupon_code = models.CharField(max_length=10,db_index=True ,validators=[coupon_code_validator], verbose_name='کد کوپن')
+    coupon_code = models.CharField(max_length=10, db_index=True, validators=[coupon_code_validator],
+                                   verbose_name='کد کوپن')
     discount_percent = models.CharField(blank=True, null=True, max_length=4, validators=[valid_pct],
                                         help_text='حتما از علامت (٪) در اخر استفاده کنید', verbose_name='درصد تخفیف')
     discount_price = models.PositiveIntegerField(blank=True, null=True, verbose_name='مقدار قیمتی تخفیف')

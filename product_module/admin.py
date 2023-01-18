@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
+
 from .models import *
 
 
@@ -21,9 +23,13 @@ class ProductGalleryInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    list_display = ['title', 'product_detail_view', 'is_active']
     inlines = [
         ProductGalleryInline
     ]
+
+    def product_detail_view(self, obj):
+        return mark_safe(f'<a href="{obj.get_absolute_url()}">view</a>')
 
 
 @admin.register(ProductVisit)
