@@ -9,8 +9,7 @@ hr {
     grid-template-areas:
     'category category category category'
     'sidebar product-list-container product-list-container product-list-container'
-    'sidebar pagination-container pagination-container pagination-container'
-;
+    'sidebar pagination-container pagination-container pagination-container';
 }
 
 #category {
@@ -39,6 +38,7 @@ hr {
     color: black;
     font-size: 1rem;
 }
+
 #category ul li a:hover {
     color: white;
 }
@@ -127,6 +127,17 @@ hr {
     transform: scale(1.07)
 }
 
+.hot-offer {
+    background-color: #e74c3c;
+    color: white;
+    padding: 3px 5px;
+    border-radius: 5px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-size: .9em;
+}
+
 .purchase-header {
     background-color: white;
 }
@@ -174,6 +185,7 @@ hr {
     grid-area: pagination-container;
     background-color: #cad1c3;
 }
-.pagination-container span{
+
+.pagination-container span {
     cursor: pointer;
 }

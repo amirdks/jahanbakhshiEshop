@@ -1,13 +1,63 @@
 
 .email-send {
-    background-image: url("../images/email-send-background.jpg");
-    /*background-attachment: fixed;*/
-    background-size: cover;
-    height: 600px;
-    display: flex;
-    align-items: center;
-    object-fit: cover;
+    /*background-image: url("../images/email-send-background.jpg");*/
+    /*!*background-attachment: fixed;*!*/
+    /*background-size: cover;*/
+    /*height: 600px;*/
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*object-fit: cover;*/
 }
+
+.email-send {
+    position: relative;
+    height: 600px;
+}
+
+.slider .item {
+    display: none;
+    position: relative;
+}
+
+.slider .item img {
+    width: 100%;
+    height: 600px;
+}
+
+.slider .item span {
+    position: absolute;
+    color: #222;
+    right: 10%;
+    top: 40%;
+    font-size: 1.5em;
+}
+
+.slider .active {
+    display: block;
+    animation-name: fadeIn;
+    animation-duration: 2s;
+}
+
+.email-send .slider-buttons {
+    position: absolute;
+    bottom: 30px;
+    left: 40px;
+    z-index: 1;
+}
+
+.email-send .slider-buttons i {
+    color: white;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.email-send .slider-buttons .active{
+    color: red;
+}
+
+.email-send .slider-buttons i:hover {
+    color: rgba(255, 255, 255, .4);;
+}
+
 
 .email-send-content {
     width: 50%;
@@ -139,51 +189,58 @@
 /*.owl-item{*/
 /*    width: 10px;!important;*/
 /*}*/
-.products-container{
+.products-container {
     width: 90%;
     margin: 0 auto;
 }
-.poster-container{
+
+.poster-container {
     background-color: #f0f0f1;
     padding: 30px 30px;
     display: grid;
     grid-gap: 25px;
     grid-template-areas:
     "poster-section poster-section big-poster"
-    "poster-section poster-section big-poster"
-;
+    "poster-section poster-section big-poster";
 }
-.poster-section{
+
+.poster-section {
     grid-area: poster-section;
     display: grid;
     grid-template-columns: repeat(2, auto);
     grid-gap: 25px;
 }
-.poster img{
+
+.poster img {
     width: 100%;
     border-radius: 20px;
     transition: transform .2s;
     height: 100%;
     object-fit: cover;
 }
-.poster img:hover{
+
+.poster img:hover {
     transform: scale(1.05);
     cursor: pointer;
 }
-.big-poster{
+
+.big-poster {
     grid-area: big-poster;
 }
-.big-poster img{
+
+.big-poster img {
     width: 100%;
     border-radius: 20px;
     height: 100%;
     transition: transform .2s;
     object-fit: cover;
 }
-.big-poster img:hover{
+
+.big-poster img:hover {
     transform: scale(1.05);
     cursor: pointer;
 }
+
 @media screen and (max-width: 1200px) {
     .purchase-item {
         margin: 1rem 30px;
@@ -206,6 +263,7 @@
         position: relative;
     }
 }
+
 @media screen and (max-width: 1000px) {
     .email-send-text {
         color: white;

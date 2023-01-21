@@ -4,15 +4,16 @@ from django.views.generic import TemplateView
 
 # Create your views here.
 from order_module.models import OrderDetail
+from product_module.models import Product
 
 
 class HomeView(TemplateView):
     template_name = 'home_module/home_page.html'
 
-    # def get_context_data(self, **kwargs):
-    #     name = 'امیر حسین'
-    #     print(slugify(name, allow_unicode=True), '----', name)
-    #     return super(HomeView, self).get_context_data(**kwargs)
+    def get_context_data(self, **kwargs):
+        context = super(HomeView, self).get_context_data(**kwargs)
+        context['new_products'] = Product.objects.all().order_by('-created_date')[:5]
+        return context
 
 
 def site_header_component(request):

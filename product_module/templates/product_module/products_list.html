@@ -106,6 +106,7 @@
                                     <img src="{{ im.url }}" alt="product-image">
                                 {% endthumbnail %}
                             </div>
+                            <span class="hot-offer">پیشنهاد ویژه</span>
                         </div>
                         <div class="purchase-text">
                             {{ product.title }}
@@ -128,7 +129,7 @@
                         </div>
                     </div>
                 {% endfor %}
-                {% else %}
+            {% else %}
                 <p class="text-danger">هیچ محصولی یافت نشد</p>
             {% endif %}
         </article>
