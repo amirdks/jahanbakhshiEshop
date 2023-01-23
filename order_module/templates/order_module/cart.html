@@ -96,8 +96,9 @@
                             </li>
                         </ul>
 
-                        <button type="button" class="btn btn-lg btn-block checkout-btn">
-                            ادامه
+                        <button type="button" class="btn btn-lg btn-block checkout-btn"
+                                {% if not order.orderdetail_set.all %}disabled{% endif %}>
+                            {% if not order.orderdetail_set.all %}لطفا ابتدا محصولی به سبد خرید اضافه کنید {% else %}ادامه{% endif %}
                         </button>
                     </div>
                 </div>
@@ -111,7 +112,8 @@
                 <form id="coupon-form" action="{% url 'cart_view' %}" method="post">
                     {% csrf_token %}
                     <label class="w-25" for="coupon-code-input">کد تخفیف:</label>
-                    <input type="text" id="coupon-code-input" class="form-control w-50 mx-auto" value="{{ order.discount.coupon_code }}">
+                    <input type="text" id="coupon-code-input" class="form-control w-50 mx-auto"
+                           value="{{ order.discount.coupon_code }}">
                     <div style="width: 50%; margin: 10px auto;">
                         <button type="submit"
                                 class="btn btn-sm btn-block checkout-btn">

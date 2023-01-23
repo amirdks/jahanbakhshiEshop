@@ -1,4 +1,5 @@
 {% load render_partial %}
+{% load cache %}
 <!doctype html>
 <html lang="en" dir="rtl">
 <head>
@@ -11,6 +12,9 @@
 <body>
 {% render_partial 'home_module.views.site_header_component' %}
 {% block content %}{% endblock %}
+{#{% cache 600 footer_component %}#}
+{#    {% include 'shared/site_footer_component.html' %}#}
+{#{% endcache %}#}
 {% include 'shared/site_footer_component.html' %}
 {% include 'shared/footer_references.html' %}
 {% block custom_script %}{% endblock %}

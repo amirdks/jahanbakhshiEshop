@@ -36,7 +36,7 @@ function changeCount(type, id, orderId) {
                 }
             },
             error: function (res) {
-                console.log('not okab')
+                showNotification({message:'لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید', status:'error'}, 'شکست')
             }
         })
     }
@@ -75,7 +75,7 @@ function deleteProduct(id) {
             }
         },
         error: function (res) {
-            console.log('not okab')
+            showNotification({message:'لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید', status:'error'}, 'شکست')
         }
     })
 }
@@ -105,7 +105,7 @@ couponForm.submit(function (e) {
             }
         },
         error: function (res) {
-            console.log('not okab')
+            showNotification({message:'لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید', status:'error'}, 'شکست')
         }
     })
 })
