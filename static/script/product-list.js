@@ -55,6 +55,8 @@ function submitSearch() {
     form.submit()
 }
 
-function goToDetailPage(url){
+function goToDetailPage(url) {
     location.href = url
 }
+
+/*salam*/
