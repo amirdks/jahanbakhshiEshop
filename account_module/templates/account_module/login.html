@@ -15,6 +15,9 @@
                     <form class="register-form" id="register-form" action="{% url 'login_view' %}" method="post">
                         {% csrf_token %}
                         {{ form.as_p }}
+                        {% if request.GET.next %}
+                            <input name="next" type="hidden" value="{{ request.GET.next }}">
+                        {% endif %}
                         <button id="submit-register-btn" class="btn mx-auto d-block" type="submit">ورود</button>
                         {% for field in form %}
                             {% for error in field.errors %}

@@ -53,7 +53,7 @@ class ProductDetailView(DetailView):
         context = super(ProductDetailView, self).get_context_data(**kwargs)
         product: Product = context.get('product')
         context['gallery'] = ProductGallery.objects.filter(product_id=product.id)
-        context['comments'] = ProductComment.objects.filter(product_id=product.id, is_accepted=True)
+        context['comments'] = ProductComment.objects.filter(product_id=product.id, is_accepted=True).order_by('-create_date')
         context['order'] = Order.objects.prefetch_related('orderdetail_set').filter(user_id=self.request.user.id,
                                                                                     is_paid=False,
                                                                                     orderdetail__product_id=product.id)

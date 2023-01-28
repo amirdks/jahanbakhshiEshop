@@ -14,18 +14,23 @@ import weasyprint
 from account_module.forms import RegisterForm, LoginForm, EditUserInfoForm, EditUserPasswordForm
 from account_module.models import User
 from order_module.models import Order
+from utils.normalize_email import normalize_email
 
 
 class RegisterView(View):
     def get(self, request):
+        if request.user.is_authenticated:
+            return redirect(reverse('home_view'))
         context = {'form': RegisterForm()}
         return render(request, 'account_module/register.html', context)
 
     def post(self, request: HttpRequest):
+        if request.user.is_authenticated:
+            return redirect(reverse('home_view'))
         form = RegisterForm(request.POST)
         if form.is_valid():
             created_user: User = form.save(commit=False)
-            created_user.username = form.cleaned_data.get('email')
+            created_user.username = normalize_email(form.cleaned_data.get('email'))
             created_user.set_password(form.cleaned_data.get('password'))
             created_user.save()
             return JsonResponse(
@@ -43,16 +48,21 @@ class RegisterView(View):
 
 class LoginView(View):
     def get(self, request):
+        if request.user.is_authenticated:
+            return redirect(reverse('home_view'))
         context = {'form': LoginForm()}
         return render(request, 'account_module/login.html', context)
 
-    def post(self, request):
+    def post(self, request: HttpRequest):
+        if request.user.is_authenticated:
+            return redirect(reverse('home_view'))
         form = LoginForm(request.POST)
         if form.is_valid():
-            user = authenticate(username=form.cleaned_data.get('email'), password=form.cleaned_data.get('password'))
+            user = authenticate(username=normalize_email(form.cleaned_data.get('email')),
+                                password=form.cleaned_data.get('password'))
             if user is not None:
                 login(request, user)
-                return redirect(reverse('home_view'))
+                return redirect(request.POST.get('next', '/'))
             else:
                 form.add_error('email', 'کاربری با مشخصات زیر یافت نشد')
                 return render(request, 'account_module/login.html', {'form': form})
@@ -60,6 +70,8 @@ class LoginView(View):
 
 class LogoutView(LoginRequiredMixin, View):
     def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect(reverse('home_view'))
         logout(request)
         return redirect(reverse('login_view'))
 
@@ -116,11 +128,11 @@ class EditUserPasswordView(LoginRequiredMixin, View):
         return render(request, 'account_module/edit_user_password.html', {'user': user, 'form': form})
 
 
-class OrderHistoryExportView(View):
+class OrderHistoryExportView(LoginRequiredMixin, View):
     def get(self, request, order_id):
         try:
             order = Order.objects.prefetch_related('orderdetail_set', 'orderdetail_set__product').get(id=order_id,
-                                                                                                    is_paid=True)
+                                                                                                      is_paid=True)
         except Order.DoesNotExist:
             return Http404('سفارش مورد نظر یافت نشد')
         html_file = render_to_string('account_module/components/pdf.html', context={'order': order})

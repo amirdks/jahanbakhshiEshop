@@ -1,6 +1,7 @@
 from django import forms
 
 from account_module.models import User
+from utils.normalize_email import normalize_email
 
 
 class RegisterForm(forms.ModelForm):
@@ -19,6 +20,13 @@ class RegisterForm(forms.ModelForm):
             'email': 'ایمیل خود را وارد کنید',
             'password': 'رمز عبور خود را وارد کنید',
         }
+
+    def save(self, commit=True):
+        m = super(RegisterForm, self).save(commit=False)
+        m.email = normalize_email(m.email)
+        if commit:
+            m.save()
+        return m
 
 
 class LoginForm(forms.Form):

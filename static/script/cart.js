@@ -13,7 +13,7 @@ function changeCount(type, id, orderId) {
         let csrfToken = cookie.substring(cookie.indexOf('=') + 1)
         $.ajax({
             method: "POST",
-            url: "/order/cart",
+            url: "/order/cart/",
             data: {
                 type: type,
                 order_detail_id: orderId,
@@ -55,7 +55,7 @@ function deleteProduct(id) {
     let csrfToken = cookie.substring(cookie.indexOf('=') + 1)
     $.ajax({
         method: "POST",
-        url: "/order/cart",
+        url: "/order/cart/",
         data: {
             type: 'delete',
             order_detail_id: id,
