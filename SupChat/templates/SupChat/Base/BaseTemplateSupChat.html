@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta charset="UTF-8">
+    {% block Title %}
+
+    {% endblock %}
+
+    <style>
+        @font-face {
+            src: url("{% static 'supchat/font/Kalameh-Black.woff' %}");
+            font-family: 'KalameBlack';
+        }
+    </style>
+
+    <link href="{% static 'supchat/fontawesome/css/all.css' %}" rel="stylesheet"
+          type="text/css"/>
+    <link rel="stylesheet" href="{% static 'supchat/font/vazir/Vazirmatn-font-face.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'supchat/css/supchat.css' %}">
+    <link rel="stylesheet" href="{% static 'supchat/css/tools.css' %}">
+    <link rel="stylesheet" href="{% static 'supchat/audio_simple/style.css' %}">
+    <script src="{% static 'supchat/audio_simple/js.js' %}"></script>
+
+
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" href="{% static 'supchat/logo/logo.png' %}">
+    <!-- Bootstrap Core CSS -->
+    <!-- Both require bootstrap -->
+    <link rel="stylesheet" href="{% static 'supchat/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'supchat/bootstrap/css/bootstrap.css' %}">
+
+    <link rel="stylesheet" href="{% static 'supchat/admin/node_modules/perfect-scrollbar/css/perfect-scrollbar.css' %}">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'supchat/admin/css/style.css' %}" >
+    <!-- Default Theme CSS -->
+    <link rel="stylesheet" href="{% static 'supchat/css/theme/default.css' %}">
+    <!-- Dashboard 1 Page CSS -->
+    <link rel="stylesheet" href="{% static 'supchat/admin/css/pages/dashboard1.css' %}">
+    <!-- You can change the theme colors from here -->
+    <link rel="stylesheet" href="{% static 'supchat/admin/css/colors/default.css' %}" id="theme" >
+
+
+    {% block Tags %}
+
+    {% endblock %}
+
+    {% block Link %}
+
+    {% endblock %}
+
+    {% block Css %}
+
+    {% endblock %}
+
+</head>
+
+{% block Content %}
+
+{% endblock %}
+<script src="{% static 'supchat/js/elements.js' %}"></script>
+<script src="{% static 'supchat/js/tools.js' %}"></script>
+<script src="{% static 'supchat/js/request_response.js' %}"></script>
+<script src="{% static 'supchat/js/mixins.js' %}"></script>
+<script src="{% static 'supchat/js/index.js' %}"></script>
+
+
+<!--  Jquery -->
+<script src="{% static 'supchat/jq/jquery.min.js' %}"></script>
+<!-- slimscrollbar scrollbar JavaScript -->
+<script src="{% static 'supchat/admin/js/perfect-scrollbar.jquery.min.js' %}"></script>
+<!-- Bootstrap popper Core JavaScript -->
+<script src="{% static 'supchat/bootstrap/js/src/bootstrap.bundle.min.js' %}"></script>
+
+<!--Menu sidebar -->
+<script src="{% static 'supchat/admin/js/sidebarmenu.js' %}"></script>
+<!--Custom JavaScript -->
+<script src="{% static 'supchat/admin/js/custom.min.js' %}"></script>
+<script src="{% static 'supchat/admin/js/dashboard1.js' %}"></script>
+<!-- Chart JS -->
+<script src="{% static 'supchat/js/chart.min.js' %}"></script>
+
+
+{% block Js %}
+{% endblock %}
+<script>
+    window.CSRF_TOKEN = '{{ csrf_token }}'
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+</script>
+</html>

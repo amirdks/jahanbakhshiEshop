@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +42,9 @@ INSTALLED_APPS = [
     'contact_module',
     'product_module',
     'order_module',
+    'SupChat',
+    'channels',
+    'emoji',
     'polls',
     'sorl.thumbnail',
     'jalali_date',
@@ -72,6 +76,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'supchat_filter': 'SupChat.templatetags.filter'
+            },
         },
     },
 ]
@@ -123,7 +130,7 @@ USE_TZ = True
 # for test
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = [BASE_DIR / "static", BASE_DIR / "assets"]
 # STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/medias/'
@@ -156,3 +163,15 @@ REDIS_DB = 1
 #     }
 # }
 # CACHE_TTL = 600
+
+# Sup Chat Config
+ASGI_APPLICATION = 'SupChat.core.routing.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],  # ip and port default redis
+        },
+    },
+}
+

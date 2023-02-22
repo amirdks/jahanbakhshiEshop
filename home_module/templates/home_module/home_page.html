@@ -141,7 +141,7 @@
             }))
             slider.classList.add('active')
             let buttons = document.querySelectorAll('.slider-buttons i')
-            buttons.forEach(element=>{
+            buttons.forEach(element => {
                 element.classList.remove('active')
             })
             e.classList.add('active')
@@ -156,4 +156,11 @@
         }, 4000)
 
     </script>
+    <script>
+        const URL_BACKEND_SUPCHAT = 'http://127.0.0.1:8000';
+        const ROOT_URL_ASSETS_SUPCHAT = '/static/';
+        const AUTO_RUN_SUPCHAT = true // Default is true;
+    </script>
+    <script src="{% static 'supchat/js/mixins.js' %}"></script>
+    <script src="{% static 'supchat/js/easy_supchat.js' %}"></script>
 {% endblock %}

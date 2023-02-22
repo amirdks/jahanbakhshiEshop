@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    path('sup-chat/', include('SupChat.urls')),
     path('', include('home_module.urls')),
     path('accounts/', include('account_module.urls')),
     path('contact-us/', include('contact_module.urls')),

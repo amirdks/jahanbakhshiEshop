@@ -1,0 +1,103 @@
+{% load static %}
+<header class="topbar">
+    <nav class="navbar top-navbar navbar-expand-md navbar-light">
+        <!-- ============================================================== -->
+        <!-- Logo -->
+        <!-- ============================================================== -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="https://github.com/FZl47/SupChat">
+                <b>
+                    <img src="{% static 'supchat/logo/logo.png' %}" alt="SupChat logo" class="light-logo"/>
+                </b>
+            </a>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Logo -->
+        <!-- ============================================================== -->
+        <div class="navbar-collapse" dir="rtl">
+            <!-- ============================================================== -->
+            <!-- toggle and nav items -->
+            <!-- ============================================================== -->
+            <ul class="navbar-nav my-lg-0">
+                <!-- ============================================================== -->
+                <!-- Profile -->
+                <!-- ============================================================== -->
+                <li class="nav-item dropdown u-pro">
+                    <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href="#"
+                       id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
+                            src="{{ request.admin.get_image }}" alt="user" class=""/> <span
+                            class="hidden-md-down">{{ request.admin.get_full_name }}</span> </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown"></ul>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle btn-open-options-dashboard" type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                            data-bs-auto-close="outside" auto-close="outsideClick">
+                        <i class="fal fa-ellipsis-v"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end options-dashboard" uib-dropdown-menu>
+                        <li>
+                            <p class="dropdown-lable">
+                                اعلانات
+                            </p>
+                            <label class="toggle">
+                                <span class="toggle-label">فعال</span>
+                                <input class="toggle-checkbox" type="checkbox" id="btn-switch-notification">
+                                <div class="toggle-switch"></div>
+                                <span class="toggle-label">غیرفعال</span>
+                            </label>
+                        </li>
+                        <li>
+                            <p class="dropdown-lable">
+                                باز کردن گفت و گو به صورت خودکار
+                            </p>
+                            <label class="toggle">
+                                <span class="toggle-label">فعال</span>
+                                <input class="toggle-checkbox" type="checkbox" id="btn-switch-auto-open-chat">
+                                <div class="toggle-switch"></div>
+                                <span class="toggle-label">غیرفعال</span>
+                            </label>
+                        </li>
+                        {% if supchat.style.get_all_theme and chat %}
+                            <li>
+                                <p class="dropdown-lable">
+                                    تم گفت و گو
+                                </p>
+                                <div class="position-relative">
+                                    <form id="form-switch-theme-chat">
+                                        {% for theme in supchat.style.get_all_theme %}
+                                            <div class="radio-custom">
+                                                <input id="theme-{{ theme.name }}" type="radio" name="theme-input"
+                                                       value="{{ theme.src }}" theme-name="{{ theme.name }}">
+                                                <label for="theme-{{ theme.name }}">{{ theme.name }}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </form>
+                                </div>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </ul>
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark"
+                                        href="javascript:void(0)"><i class="fal fa-bars"></i></a></li>
+                <!-- ============================================================== -->
+                <!-- Search -->
+                <!-- ============================================================== -->
+                <li class="nav-item hidden-xs-down search-box"><a
+                        class="nav-link hidden-sm-down waves-effect waves-dark" href="javascript:void(0)"><i
+                        class="fal fa-search"></i></a>
+                    <form method="get" class="app-search"
+                          action="{% url 'SupChat:view_admin_search' %}?{{ request.GET.q }}">
+                        <input type="text" value="{{ request.GET.q }}" maxlength="100" class="form-control" name="q"
+                               placeholder="Search & enter"> <a
+                            class="srh-btn"><i class="fal fa-times"></i></a></form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>

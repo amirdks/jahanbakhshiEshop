@@ -1,0 +1,42 @@
+{% load supchat_filter %}
+<aside
+        class="left-sidebar">
+    <!-- Sidebar scroll-->
+    <div class="scroll-sidebar">
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav mt-4">
+            <ul id="sidebarnav">
+                    <li><a class="waves-effect waves-dark {% if type_page_included == 'view_admin_chats' %} active {% endif %}" href="{% url 'SupChat:view_admin' %}" aria-expanded="false"><i
+                            class="fal fa-comments-alt"></i><span class="hide-menu">گفت و گو ها</span></a>
+                    </li>
+                    <li><a class="waves-effect waves-dark  {% if type_page_included == 'view_admin_users_baned' %} active {% endif %}" href="{% url 'SupChat:view_users_baned_admin' %}" aria-expanded="false"><i
+                            class="fal fa-ban"></i><span class="hide-menu">مسدود شده ها</span></a>
+                    </li>
+                    <li><a class="waves-effect waves-dark  {% if request.build_absolute_uri|parametr_in_url:'notification' %} active {% endif %}" href="{% url 'SupChat:view_admin' %}#notifications" aria-expanded="false"><i
+                            class="fal fa-bell"></i><span class="hide-menu">اعلانات</span></a>
+                    </li>
+                    <li><a class="waves-effect waves-dark  {% if type_page_included == 'view_admin_info' %} active {% endif %}" href="{% url 'SupChat:view_info_admin' %}" aria-expanded="false"><i
+                            class="fal fa-info mr-1"></i><span class="hide-menu">اطلاعات شخصی</span></a>
+                    </li>
+                <li>
+                    <a class="waves-effect waves-dark" href="{% url 'SupChat:view_logout_admin' %}" aria-expanded="false">
+                        <i class="fal fa-sign-out"></i>
+                        <span class="hide-menu">خروج</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- End Sidebar navigation -->
+        <div class="container-title-supchat-intro">
+            <a href="https://github.com/FZl47/SupChat" target="_blank">
+                <svg class="title-supchat-intro">
+                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">
+                        SupChat
+                    </text>
+                    <p>Support Chat</p>
+                </svg>
+            </a>
+        </div>
+    </div>
+    <!-- End Sidebar scroll-->
+</aside>
