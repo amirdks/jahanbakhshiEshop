@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import render
 
@@ -9,7 +10,7 @@ from contact_module.models import ContactUs
 from site_module.models import SiteSetting
 
 
-class ContactUsView(View):
+class ContactUsView(LoginRequiredMixin,View):
     def get(self, request):
         context = {'site_setting': SiteSetting.objects.filter(is_main_setting=True).first(), 'form': ContactUsForm()}
         return render(request, 'contact_module/contact-us.html', context)
