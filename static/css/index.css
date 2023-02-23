@@ -50,7 +50,8 @@
     margin-right: 5px;
     cursor: pointer;
 }
-.email-send .slider-buttons .active{
+
+.email-send .slider-buttons .active {
     color: red;
 }
 
@@ -261,6 +262,19 @@
         box-shadow: 0 5px 10px 0 rgb(0 0 0 / 25%);
         border-radius: 5px;
         position: relative;
+    }
+
+    .slider .item img {
+        width: 100%;
+        height: 300px;
+    }
+
+    .slider .item span {
+        font-size: 1.1em;
+    }
+
+    .grid-item h2 {
+        font-size: 1rem;
     }
 }
 
