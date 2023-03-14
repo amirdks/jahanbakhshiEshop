@@ -28,13 +28,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+LOCAL_APPS = [
     'account_module',
     'home_module',
     'site_module',
@@ -42,19 +36,34 @@ INSTALLED_APPS = [
     'product_module',
     'order_module',
     'polls',
+]
+THIRD_PARTY_APPS = [
     'sorl.thumbnail',
     'jalali_date',
     'django_render_partial',
+    'corsheaders',
+]
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    *THIRD_PARTY_APPS,
+    *LOCAL_APPS,
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'django.middleware.http.ConditionalGetMiddleware',
 ]
 
 ROOT_URLCONF = 'jahanbakhshiEshop.urls'
@@ -156,3 +165,5 @@ REDIS_DB = 1
 #     }
 # }
 # CACHE_TTL = 600
+# corsheader confi
+CORS_ORIGIN_ALLOW_ALL = False

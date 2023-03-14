@@ -297,3 +297,8 @@ class ProductCoupon(models.Model):
     @property
     def get_discount_percent(self):
         return float(self.discount_percent.strip('%'))
+
+
+class TestDownload(models.Model):
+    image = models.ImageField(upload_to='images/')
+    file = models.FileField(upload_to='files/')

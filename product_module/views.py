@@ -2,14 +2,15 @@ import time
 
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse, FileResponse
 from django.shortcuts import render
 
 # Create your views here.
 from django.views.generic import ListView, View, DetailView
 
 from order_module.models import Order
-from product_module.models import Product, ProductBrand, ProductGallery, ProductComment, ProductVote, ProductCategory
+from product_module.models import Product, ProductBrand, ProductGallery, ProductComment, ProductVote, ProductCategory, \
+    TestDownload
 from product_module.recommender import Recommender
 
 
@@ -53,7 +54,8 @@ class ProductDetailView(DetailView):
         context = super(ProductDetailView, self).get_context_data(**kwargs)
         product: Product = context.get('product')
         context['gallery'] = ProductGallery.objects.filter(product_id=product.id)
-        context['comments'] = ProductComment.objects.filter(product_id=product.id, is_accepted=True).order_by('-create_date')
+        context['comments'] = ProductComment.objects.filter(product_id=product.id, is_accepted=True).order_by(
+            '-create_date')
         context['order'] = Order.objects.prefetch_related('orderdetail_set').filter(user_id=self.request.user.id,
                                                                                     is_paid=False,
                                                                                     orderdetail__product_id=product.id)
@@ -104,3 +106,49 @@ class ProductDetailView(DetailView):
         time.sleep(1)
         return JsonResponse(
             {'status': 'success', 'message': 'نظر شما با موفقیت ثبت شد بعد از تایید ادمین در سایت قرار میگیرد'})
+
+
+class TestDownloadView(View):
+    def get(self, request):
+        # return render(request, 'product_module/test.html')
+        # test = TestDownload.objects.first()
+        # return FileResponse(test.file, as_attachment=True)
+        test = TestDownload.objects.get(id=1)
+        response = HttpResponse(test.file.read(), content_type="application/zip")
+        response['Content-Disposition'] = 'attachment; filename={0}'.format("Export.rar")
+        return response
+
+    def post(self, request):
+        test = TestDownload.objects.first()
+        print('aha')
+        return FileResponse(test.file, as_attachment=True)
+
+
+# class Test(View):
+#     def get(self, request):
+#         return render(request, 'product_module/test.html')
+#
+#     def post(self, request):
+#         test = TestDownload.objects.first()
+#         print('aha')
+#         return FileResponse(test.file, as_attachment=True)
+
+
+# class Test(View):
+#     def get(self, request):
+#         return render(request, 'product_module/test.html')
+#
+#     def post(self, request):
+#         test = TestDownload.objects.get(id=1)
+#         response = HttpResponse(test.file.read(), content_type="application/zip")
+#         response['Content-Disposition'] = 'attachment; filename={0}'.format("Export.rar")
+#         return response
+class Test(View):
+    def get(self, request):
+        return render(request, 'product_module/test1.html')
+
+    def post(self, request):
+        test = TestDownload.objects.get(id=1)
+        response = HttpResponse(test.file.read(), content_type="application/zip")
+        response['Content-Disposition'] = 'attachment; filename={0}'.format("Export.rar")
+        return response

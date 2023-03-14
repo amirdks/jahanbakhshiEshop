@@ -256,7 +256,10 @@
                     }
                 },
                 error: function (res) {
-                    showNotification({message:'لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید', status:'error'}, 'شکست')
+                    showNotification({
+                        message: 'لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید',
+                        status: 'error'
+                    }, 'شکست')
                 }
             })
         })
@@ -264,15 +267,11 @@
         let starFormInputs = document.querySelectorAll('#star-form input')
         starFormInputs.forEach((e) => {
             e.addEventListener('input', ev => {
-                let cookie = document.cookie
-                let csrfToken = cookie.substring(cookie.indexOf('=') + 1)
                 $body = $("body");
                 $(document).ajaxStart(function () {
-                    console.log('ajax started')
                     $body.addClass("loading");
                 });
                 $(document).ajaxStop(function () {
-                    console.log('ajax ended')
                     $body.removeClass("loading");
                 })
                 $.ajax({
@@ -282,7 +281,7 @@
                         star: ev.target.value
                     },
                     headers: {
-                        'X-CSRFToken': csrfToken
+                        'X-CSRFToken': getCookie("csrftoken")
                     },
                     success: function (res) {
                         if (res.status === 'success') {
@@ -293,15 +292,17 @@
                         }
                     },
                     error: function (res) {
-                        showNotification({message:'لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید', status:'error'}, 'شکست')
+                        showNotification({
+                            message: 'لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید',
+                            status: 'error'
+                        }, 'شکست')
                     }
                 })
             })
         })
 
+
         function addToCart(productId) {
-            let cookie = document.cookie
-            let csrfToken = cookie.substring(cookie.indexOf('=') + 1)
             $.ajax({
                 method: "POST",
                 url: '{% url 'add_product_to_order_view' %}',
@@ -310,7 +311,7 @@
                     count: document.getElementById('product-count-input').value
                 },
                 headers: {
-                    'X-CSRFToken': csrfToken
+                    'X-CSRFToken': getCookie("csrftoken")
                 },
                 success: function (res) {
                     if (res.status === 'success') {
@@ -328,7 +329,11 @@
                     }
                 },
                 error: function (res) {
-                    showNotification({message:'لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید', status:'error'}, 'شکست')
+                    console.log("salam dabsh khobi?")
+                    showNotification({
+                        message: 'لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید',
+                        status: 'error'
+                    }, 'شکست')
                 }
             })
         }

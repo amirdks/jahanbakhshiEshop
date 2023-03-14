@@ -9,8 +9,6 @@ function changeCount(type, id, orderId) {
     if (type === 'reduce' && input.value === '1') {
         console.log('shit')
     } else {
-        let cookie = document.cookie
-        let csrfToken = cookie.substring(cookie.indexOf('=') + 1)
         $.ajax({
             method: "POST",
             url: "/order/cart/",
@@ -19,7 +17,7 @@ function changeCount(type, id, orderId) {
                 order_detail_id: orderId,
             },
             headers: {
-                'X-CSRFToken': csrfToken
+                'X-CSRFToken': getCookie("csrftoken")
             },
             success: function (res) {
                 if (res.status === 'success') {
@@ -51,8 +49,6 @@ function addInputValue(id, orderId) {
 }
 
 function deleteProduct(id) {
-    let cookie = document.cookie
-    let csrfToken = cookie.substring(cookie.indexOf('=') + 1)
     $.ajax({
         method: "POST",
         url: "/order/cart/",
@@ -61,7 +57,7 @@ function deleteProduct(id) {
             order_detail_id: id,
         },
         headers: {
-            'X-CSRFToken': csrfToken
+            'X-CSRFToken': getCookie("csrftoken")
         },
         success: function (res) {
             if (res.status === 'success') {
@@ -83,8 +79,6 @@ function deleteProduct(id) {
 let couponForm = $('#coupon-form');
 couponForm.submit(function (e) {
     e.preventDefault()
-    let cookie = document.cookie
-    let csrfToken = cookie.substring(cookie.indexOf('=') + 1)
     $.ajax({
         method: "POST",
         url: e.target.action,
@@ -93,7 +87,7 @@ couponForm.submit(function (e) {
             coupon_code: $('#coupon-code-input').val()
         },
         headers: {
-            'X-CSRFToken': csrfToken
+            'X-CSRFToken': getCookie("csrftoken")
         },
         success: function (res) {
             if (res.status === 'success') {

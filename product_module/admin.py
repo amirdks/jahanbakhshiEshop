@@ -55,3 +55,9 @@ class ProductVoteAdmin(admin.ModelAdmin):
 @admin.register(ProductCoupon)
 class ProductCouponAdmin(admin.ModelAdmin):
     list_display = ['coupon_code', 'discount_type']
+
+
+@admin.register(TestDownload)
+class ProductCouponAdmin(admin.ModelAdmin):
+    # list_display = ['coupon_code', 'discount_type']
+    pass

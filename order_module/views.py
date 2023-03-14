@@ -77,6 +77,7 @@ class CartView(LoginRequiredMixin, View):
 
 @require_POST
 def add_product_to_order(request: HttpRequest):
+    print("okeye ke dash")
     product_id = int(request.POST.get('product_id'))
     count = int(request.POST.get('count'))
     if count < 1:
