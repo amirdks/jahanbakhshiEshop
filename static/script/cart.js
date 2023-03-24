@@ -3,7 +3,7 @@ const formatter = new Intl.NumberFormat('fa-IR', {
     currency: 'IRR',
 });
 $('#delivery-price').html(formatter.format(15000))
-
+let csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value
 function changeCount(type, id, orderId) {
     let input = document.querySelector(`#cart-quantity-input-${id}`);
     if (type === 'reduce' && input.value === '1') {
@@ -17,7 +17,7 @@ function changeCount(type, id, orderId) {
                 order_detail_id: orderId,
             },
             headers: {
-                'X-CSRFToken': getCookie("csrftoken")
+                'X-CSRFToken': csrfToken
             },
             success: function (res) {
                 if (res.status === 'success') {
@@ -57,7 +57,7 @@ function deleteProduct(id) {
             order_detail_id: id,
         },
         headers: {
-            'X-CSRFToken': getCookie("csrftoken")
+            'X-CSRFToken': csrfToken
         },
         success: function (res) {
             if (res.status === 'success') {
@@ -87,7 +87,7 @@ couponForm.submit(function (e) {
             coupon_code: $('#coupon-code-input').val()
         },
         headers: {
-            'X-CSRFToken': getCookie("csrftoken")
+            'X-CSRFToken': csrfToken
         },
         success: function (res) {
             if (res.status === 'success') {

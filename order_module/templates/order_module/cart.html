@@ -124,6 +124,7 @@
             </div>
         </div>
     </section>
+    {% csrf_token %}
 {% endblock %}
 {% block custom_script %}
     <script src="{% static 'script/cart.js' %}"></script>
