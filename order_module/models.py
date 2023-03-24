@@ -74,3 +74,9 @@ class OrderDetail(models.Model):
 
     def __str__(self):
         return str(self.order)
+
+
+class Shipment(models.Model):
+    user = models.ForeignKey('account_module.User', on_delete=models.CASCADE, verbose_name="کاربر")
+    first_name = models.CharField(max_length=255, verbose_name="نام گیرنده")
+    last_name = models.CharField(max_length=255, verbose_name="نام خانوادگی گیرنده")

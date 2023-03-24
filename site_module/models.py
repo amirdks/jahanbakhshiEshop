@@ -35,3 +35,12 @@ class SiteEmailBanner(models.Model):
 
     def __str__(self):
         return self.alt_text
+
+
+class Province(models.Model):
+    name = models.CharField(max_length=255, unique=True, verbose_name="نام استان")
+
+
+class City(models.Model):
+    name = models.CharField(max_length=255, unique=True, verbose_name="نام شهر")
+    province = models.ForeignKey("Province", on_delete=models.CASCADE, verbose_name="استان مربوطه")

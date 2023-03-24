@@ -128,6 +128,36 @@
                             <div class="left"><span> 2.5 </span><i class="fa-solid fa-star"></i></div>
                         </div>
                     </div>
+                    <div onclick="goToDetailPage('{% url 'product_detail_view' slug=product.slug %}')"
+                         class="purchase-item">
+                        <div class="purchase-header">
+                            <div>
+                                {% thumbnail product.image "400x400" crop="center" quality=95 as im %}
+                                    <img src="{{ im.url }}" alt="product-image">
+                                {% endthumbnail %}
+                            </div>
+                            <span class="hot-offer">پیشنهاد ویژه</span>
+                        </div>
+                        <div class="purchase-text">
+                            {{ product.title }}
+                        </div>
+                        <div class="purchase-button">
+                            <button class="addtocart">
+                                <div class="pretext">
+                                    <i class="fas fa-cart-plus"></i> افزودن به سبد خرید
+                                </div>
+
+                                <div class="pretext done">
+                                    <div class="posttext"><i class="fas fa-check"></i> اضافه شد</div>
+                                </div>
+
+                            </button>
+                        </div>
+                        <div class="purchase-footer">
+                            <div class="right">{{ product.price|three_digits_currency }}</div>
+                            <div class="left"><span> 2.5 </span><i class="fa-solid fa-star"></i></div>
+                        </div>
+                    </div>
                 {% endfor %}
             {% else %}
                 <p class="text-danger">هیچ محصولی یافت نشد</p>
