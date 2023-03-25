@@ -2,14 +2,17 @@ import datetime
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpRequest, HttpResponseForbidden
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 # Create your views here.
 from django.utils.safestring import mark_safe
 from django.views import View
 
-from order_module.models import Order, OrderDetail
+from order_module.forms import ShipmentForm
+from order_module.models import Order, OrderDetail, Shipment
 from product_module.models import Product, ProductCoupon
+from site_module.models import Province, City
 
 
 class CartView(LoginRequiredMixin, View):
@@ -77,7 +80,6 @@ class CartView(LoginRequiredMixin, View):
 
 @require_POST
 def add_product_to_order(request: HttpRequest):
-    print("okeye ke dash")
     product_id = int(request.POST.get('product_id'))
     count = int(request.POST.get('count'))
     if count < 1:
@@ -113,3 +115,39 @@ def add_product_to_order(request: HttpRequest):
             'status': 'error',
             'message': 'برای افزودن محصول به سبد خرید ابتدا می بایست وارد سایت شوید',
         })
+
+
+class ShipmentView(LoginRequiredMixin, View):
+    current_order = Order.objects.prefetch_related('orderdetail_set').filter(is_paid=False).first()
+
+    def get(self, request):
+        if not self.current_order.orderdetail_set.first():
+            return HttpResponseForbidden("ابتدا باید محصولی را به سبد خرید خود اضافه کنید")
+        return render(request, 'order_module/shipment.html')
+
+    def post(self, request):
+        form = ShipmentForm(request.POST)
+        if form.is_valid():
+            province = form.cleaned_data.pop("province")
+            city = form.cleaned_data.pop("city")
+            try:
+                db_province = Province.objects.get(name=province)
+                db_city = City.objects.get(name=city)
+            except (Province.DoesNotExist, City.DoesNotExist) as e:
+                return render(request, 'order_module/shipment.html',
+                              context={"error": "شهر یا استان انتخاب شده معتبر نمیباشد", "error_field": "none_field"})
+
+            created_shipment = Shipment.objects.create(**form.cleaned_data, province_id=db_province.id,
+                                                       city_id=db_city.id, user_id=request.user.id)
+            self.current_order.shipment_id = created_shipment.id
+            self.current_order.save()
+            return redirect(reverse('cart_view'))
+        else:
+            error = 'مشکلی رخ داد'
+            error_field = "none_field"
+            for field in form:
+                if field.errors:
+                    for error in field.errors:
+                        error = error
+                        error_field = field.html_initial_id.replace("initial-id_", "")
+            return render(request, 'order_module/shipment.html', context={"error": error, "error_field": error_field})

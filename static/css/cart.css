@@ -127,6 +127,12 @@
     background-color: white;
     /*margin: 5px;*/
 }
+#submit-link{
+    color: #301860;
+}
+#submit-link:hover{
+    color: #cc25a9;
+}
 
 @media only screen and (max-width: 768px) {
     .cart-background-container {

@@ -2,11 +2,14 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 # Create your models here.
-from order_module.validators import min_count_validator
+from order_module.validators import min_count_validator, is_valid_iran_code, is_valid_phone_number, contains_number, \
+    is_valid_postal_code
 
 
 class Order(models.Model):
     user = models.ForeignKey('account_module.User', on_delete=models.CASCADE, verbose_name='کاربر')
+    shipment = models.ForeignKey("Shipment", on_delete=models.SET_NULL, null=True, blank=True,
+                                 verbose_name="اطلاعات تحویل")
     is_paid = models.BooleanField(verbose_name='نهایی شده/نشده')
     payment_date = models.DateField(null=True, blank=True, verbose_name='تاریخ پرداخت')
     discount = models.ForeignKey('product_module.ProductCoupon', on_delete=models.SET_NULL, blank=True, null=True,
@@ -80,3 +83,19 @@ class Shipment(models.Model):
     user = models.ForeignKey('account_module.User', on_delete=models.CASCADE, verbose_name="کاربر")
     first_name = models.CharField(max_length=255, verbose_name="نام گیرنده")
     last_name = models.CharField(max_length=255, verbose_name="نام خانوادگی گیرنده")
+    national_code = models.CharField(max_length=255, validators=[is_valid_iran_code], verbose_name="کد ملی گیرنده")
+    phone_number = models.CharField(max_length=255, validators=[is_valid_phone_number],
+                                    verbose_name="شماره تماس گیرنده")
+    province = models.ForeignKey("site_module.Province", on_delete=models.CASCADE, verbose_name="استان مقصد")
+    city = models.ForeignKey("site_module.City", on_delete=models.CASCADE, verbose_name="شهر مقصد")
+    house_number = models.CharField(max_length=255, null=True, blank=True, verbose_name="پلاک خونه")
+    building_unit = models.CharField(max_length=255, null=True, blank=True, verbose_name="واحد خونه")
+    postal_code = models.CharField(max_length=255, validators=[is_valid_postal_code], verbose_name="کد پستی")
+    address = models.TextField(verbose_name="آدرس پستی")
+
+    class Meta:
+        verbose_name = 'مشخصات تحویل گیرنده'
+        verbose_name_plural = 'مشخصات تحویل گیرندگان'
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} : {self.postal_code}"

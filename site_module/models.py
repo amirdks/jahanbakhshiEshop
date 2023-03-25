@@ -38,9 +38,23 @@ class SiteEmailBanner(models.Model):
 
 
 class Province(models.Model):
-    name = models.CharField(max_length=255, unique=True, verbose_name="نام استان")
+    name = models.CharField(max_length=255, verbose_name="نام استان")
+
+    class Meta:
+        verbose_name = 'استان'
+        verbose_name_plural = 'استان ها'
+
+    def __str__(self):
+        return self.name
 
 
 class City(models.Model):
-    name = models.CharField(max_length=255, unique=True, verbose_name="نام شهر")
+    name = models.CharField(max_length=255, verbose_name="نام شهر")
     province = models.ForeignKey("Province", on_delete=models.CASCADE, verbose_name="استان مربوطه")
+
+    class Meta:
+        verbose_name = "شهر"
+        verbose_name_plural = 'شهر ها'
+
+    def __str__(self):
+        return self.name

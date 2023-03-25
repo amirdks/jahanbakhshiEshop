@@ -4,6 +4,7 @@ const formatter = new Intl.NumberFormat('fa-IR', {
 });
 $('#delivery-price').html(formatter.format(15000))
 let csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value
+
 function changeCount(type, id, orderId) {
     let input = document.querySelector(`#cart-quantity-input-${id}`);
     if (type === 'reduce' && input.value === '1') {
@@ -34,7 +35,7 @@ function changeCount(type, id, orderId) {
                 }
             },
             error: function (res) {
-                showNotification({message:'لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید', status:'error'}, 'شکست')
+                showNotification({message: 'لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید', status: 'error'}, 'شکست')
             }
         })
     }
@@ -61,7 +62,16 @@ function deleteProduct(id) {
         },
         success: function (res) {
             if (res.status === 'success') {
-                $(`#cart-product-${id}`).fadeOut(1000)
+                let cartProduct = $(`#cart-product-${id}`);
+                cartProduct.fadeOut(1000);
+                setTimeout(() => {
+                    cartProduct.remove();
+                    let cartProducts = document.getElementsByClassName("cart-product")
+                    if (cartProducts.length === 0){
+                        $('#submit-btn').attr("disabled", "").text("لطفا ابتدا محصولی اضافه کنید");
+                        $('#submit-link').attr("href", "#")
+                    }
+                }, 1000)
                 $(`#total-amount-${id}`).html(formatter.format(res.total))
                 $('#total-cart-amount').html(formatter.format(res.total_amount + 15000))
                 $('#total-cart-2-amount').html(formatter.format(res.total_products))
@@ -71,7 +81,7 @@ function deleteProduct(id) {
             }
         },
         error: function (res) {
-            showNotification({message:'لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید', status:'error'}, 'شکست')
+            showNotification({message: 'لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید', status: 'error'}, 'شکست')
         }
     })
 }
@@ -99,7 +109,7 @@ couponForm.submit(function (e) {
             }
         },
         error: function (res) {
-            showNotification({message:'لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید', status:'error'}, 'شکست')
+            showNotification({message: 'لطفا از اتصال اینترنت خود اطمینان حاصل فرمایید', status: 'error'}, 'شکست')
         }
     })
 })

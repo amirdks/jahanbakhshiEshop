@@ -96,10 +96,15 @@
                             </li>
                         </ul>
 
-                        <button type="button" class="btn btn-lg btn-block checkout-btn"
-                                {% if not order.orderdetail_set.all %}disabled{% endif %}>
-                            {% if not order.orderdetail_set.all %}لطفا ابتدا محصولی به سبد خرید اضافه کنید {% else %}ادامه{% endif %}
-                        </button>
+                        <a id="submit-link"
+                           href="{% if order.orderdetail_set.all %} {% url "shipment_view" %} {% else %} # {% endif %} ">
+                            <button href="{% url "shipment_view" %}" id="submit-btn" type="button"
+                                    class="btn btn-lg btn-block checkout-btn"
+                                    {% if not order.orderdetail_set.all %}disabled{% endif %}>
+                                {% if not order.orderdetail_set.all %}لطفا ابتدا محصولی به سبد خرید اضافه
+                                    کنید {% else %}ادامه{% endif %}
+                            </button>
+                        </a>
                     </div>
                 </div>
             </div>

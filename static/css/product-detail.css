@@ -213,11 +213,25 @@
 }
 
 .product-detail {
-    display: flex;
+    /*display: flex;*/
     flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-content: flex-start;
     width: 90%;
     margin: 0 auto;
+    position: relative;
+}
+
+.product-detail::after {
+    content: "salam";
+    border-right: 3px solid lightgray;
+    position: absolute;
+    right: 50%;
+    height: 106%;
+    text-indent: -10000px;
+    padding: 20px 0;
+    top: -.5px;
 }
 
 .product-detail div {
@@ -232,11 +246,11 @@
 }
 
 .product-detail-title {
-    width: calc(40% - 30px);
+    /*width: 20%;*/
 }
 
 .product-detail-content {
-    width: calc(60% - 30px);
+    /*width: 10%;*/
 }
 
 .link-muted {
@@ -307,15 +321,24 @@
         border-radius: 5px;
         padding-top: 5px;
         padding-right: 5px;
+        text-align: center;
     }
 
-    .product-detail-title {
-        width: calc(40% - 10px);
+    .product-detail {
+        grid-template-columns: repeat(2, 1fr);
     }
 
-    .product-detail-content {
-        width: calc(60% - 10px);
+    .product-detail::after {
+        content: "";
+        border: none;
     }
+
+    /*.product-detail-title {*/
+    /*    width: calc(40% - 10px);*/
+    /*}*/
+    /*.product-detail-content {*/
+    /*    width: calc(60% - 10px);*/
+    /*}*/
 }
 
 @media screen and (max-width: 992px) {
@@ -323,6 +346,7 @@
         font-size: 1.8rem;
     }
 }
+
 @media screen and (max-width: 992px ) {
     .product-image img {
         height: 250px;
