@@ -11,6 +11,7 @@ from utils.unique_slug_generator import unique_slug_generator
 
 
 class ProductCategory(models.Model):
+    parent = models.ForeignKey('self', related_name='children', on_delete=models.CASCADE, blank=True, null=True)
     title = models.CharField(
         max_length=300,
         db_index=True,
@@ -33,7 +34,12 @@ class ProductCategory(models.Model):
     )
 
     def __str__(self):
-        return f'( {self.title} - {self.slug} )'
+        full_path = [self.title]
+        k = self.parent
+        while k is not None:
+            full_path.append(k.title)
+            k = k.parent
+        return ' -> '.join(full_path[::-1])
 
     def save(self, *args, **kwargs):  # new
         if not self.slug:
@@ -43,6 +49,7 @@ class ProductCategory(models.Model):
     class Meta:
         verbose_name = 'دسته بندی'
         verbose_name_plural = 'دسته بندی ها'
+        unique_together = ('slug', 'parent',)
 
 
 class ProductBrand(models.Model):

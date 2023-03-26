@@ -13,9 +13,41 @@ hr {
     /*'sidebar pagination-container pagination-container pagination-container';*/
 }
 
+/*#category {*/
+/*    !*grid-area: category;*!*/
+/*    background-color: #c78df6;*/
+/*    grid-column: 1/6;*/
+/*}*/
+
+/*#category .container {*/
+/*    padding-right: 70px;*/
+/*}*/
+
+/*#category ul {*/
+/*    display: flex;*/
+/*    justify-content: flex-start;*/
+/*    align-items: center;*/
+/*    height: 100%;*/
+/*}*/
+
+/*#category ul li {*/
+/*    display: inline-block;*/
+/*    margin: 0 20px;*/
+/*}*/
+
+/*#category ul li a {*/
+/*    text-decoration: none;*/
+/*    color: black;*/
+/*    font-size: 1rem;*/
+/*}*/
+
+/*#category ul li a:hover {*/
+/*    color: white;*/
+/*}*/
+
+
 #category {
-    /*grid-area: category;*/
-    background-color: #c78df6;
+        background-color: #c78df6;
     grid-column: 1/6;
 }
 
@@ -23,27 +55,81 @@ hr {
     padding-right: 70px;
 }
 
-#category ul {
+#category #main-ul {
     display: flex;
     justify-content: flex-start;
-    align-items: center;
+    align-items: stretch;
     height: 100%;
 }
 
-#category ul li {
-    display: inline-block;
+#category #main-ul .main-li {
+    /*display: inline-block;*/
     margin: 0 20px;
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
-#category ul li a {
+#category #main-ul .main-li:hover > .inner-category {
+    visibility: visible;
+    opacity: 1;
+    top: 40px;
+}
+
+.main-a {
     text-decoration: none;
-    color: black;
     font-size: 1rem;
+    color: black;
 }
 
-#category ul li a:hover {
-    color: white;
+.inner-category {
+    position: absolute;
+    padding-right: 0;
+    top: 60px;
+    left: -20px;
+    visibility: hidden;
+    opacity: 0;
+    background-color: white;
+    /*height: auto;*/
+    display: flex;
+    width: max-content;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all .3s linear;
+    z-index: 9999;
 }
+
+.inner-category-2 {
+    position: absolute;
+    top: 5px;
+    right: 101%;
+}
+
+
+.inner-category li {
+    /*width: auto;*/
+    padding: 10px 20px;
+    list-style: none;
+    display: block;
+    border: 1px solid lightgray;
+    position: relative;
+}
+
+.inner-category li:hover > .inner-category {
+    opacity: 1;
+    visibility: visible;
+}
+
+.inner-category li:hover {
+    background-color: lightgray;
+    cursor: pointer;
+}
+
+.inner-category li a {
+    color: black;
+}
+
 
 #sidebar {
     /*grid-area: sidebar;*/

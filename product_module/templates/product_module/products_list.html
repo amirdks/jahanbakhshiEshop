@@ -10,12 +10,42 @@
 {% endblock %}
 {% block content %}
     <div id="grid-container">
+        {#        <section id="category">#}
+        {#            <div class="container h-100">#}
+        {#                <ul>#}
+        {#                    {% for category in categories %}#}
+        {#                        <li><a href="{% url 'product_categories_list' cat=category.slug %}">{{ category.title }}</a>#}
+        {#                        </li>#}
+        {#                    {% endfor %}#}
+        {#                </ul>#}
+        {#            </div>#}
+        {#        </section>#}
         <section id="category">
             <div class="container h-100">
-                <ul>
+                <ul id="main-ul">
                     {% for category in categories %}
-                        <li><a href="{% url 'product_categories_list' cat=category.slug %}">{{ category.title }}</a>
-                        </li>
+                        {% if not category.children.all %}
+                            <li class="main-li"><a class="main-a" href="{% url "product_categories_list" cat=category.slug %}">{{ category.title }}</a></li>
+                        {% else %}
+                            <li class="main-li">
+                                <a class="main-a" href="{% url "product_categories_list" cat=category.slug %}">{{ category.title }}</a>
+                                <ul class="inner-category">
+                                    {% for child in category.children.all %}
+                                        {% if not child.children.all %}
+                                            <li><a href="{% url "product_categories_list" cat=child.slug %}">{{ child.title }}</a></li>
+                                        {% else %}
+                                            <li><a href="{% url "product_categories_list" cat=child.slug %}">{{ child.title }}
+                                                <ul class="inner-category inner-category-2">
+                                                    {% for sub_child in child.children.all %}
+                                                        <li><a href="{% url "product_categories_list" cat=sub_child.slug %}">{{ sub_child.title }}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </a></li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
                     {% endfor %}
                 </ul>
             </div>

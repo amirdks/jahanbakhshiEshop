@@ -19,14 +19,15 @@ class ProductListView(View):
         products = Product.objects.filter(is_delete=False, is_active=True).order_by('-created_date')
         products = self.filter(request, products, cat)
         products = self.pagination(request, products)
-        categories = ProductCategory.objects.filter(is_active=True, is_delete=False)
+        categories = ProductCategory.objects.filter(is_active=True, is_delete=False, parent=None)
         context = {'products': products, 'brands': ProductBrand.objects.filter(is_active=True),
                    'categories': categories}
         return render(request, 'product_module/products_list.html', context=context)
 
     def filter(self, request, products, cat=None):
         if cat is not None:
-            products = products.filter(category__slug__iexact=cat)
+            products = products.filter(Q(category__slug__iexact=cat) | Q(category__parent__slug__iexact=cat) | Q(
+                category__parent__parent__slug__iexact=cat))
         if request.GET.get('brand'):
             products = products.filter(brand__english_title=request.GET.get('brand'))
         search = request.GET.get('search')

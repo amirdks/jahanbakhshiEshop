@@ -4,10 +4,16 @@ from django.utils.safestring import mark_safe
 from .models import *
 
 
+class ProductCategoryInline(admin.TabularInline):
+    model = ProductCategory
+    raw_id_fields = ['parent']
+    extra = 1
+
+
 # Register your models here.
 @admin.register(ProductCategory)
 class ProductCategoryAdmin(admin.ModelAdmin):
-    pass
+    inlines = [ProductCategoryInline]
 
 
 @admin.register(ProductBrand)
