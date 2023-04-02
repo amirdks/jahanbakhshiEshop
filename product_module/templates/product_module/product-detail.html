@@ -110,10 +110,12 @@
             </div>
             <hr>
             <div class="product-detail">
-                {% for i in '012345678'|make_list %}
-                    <div class="product-detail-title">{{ product|show_persian_detail:i }}</div>
-                    <div class="product-detail-content">{{ product | show_detail:i }}</div>
-                {% endfor %}
+{#                {% for i in '012345678'|make_list %}#}
+                    {% for attribute in product.product_attributes.all %}
+                        <div class="product-detail-title">{{ attribute.product_detail.key }}</div>
+                        <div class="product-detail-content">{{ attribute.value }}</div>
+                    {% endfor %}
+{#                {% endfor %}#}
             </div>
         </div>
         <div class="product-detail-container">

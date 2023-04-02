@@ -101,40 +101,40 @@ class Product(models.Model):
     price = models.IntegerField(
         verbose_name='قیمت'
     )
-    size = models.CharField(
-        max_length=50,
-        verbose_name='ابعاد'
-    )
-    weight = models.FloatField(
-        verbose_name='وزن'
-    )
-    screen_size = models.CharField(
-        max_length=50,
-        verbose_name='سایز صفحه نمایش'
-    )
-    cpu = models.CharField(
-        max_length=50,
-        verbose_name='پردازنده'
-    )
-    gpu = models.CharField(
-        max_length=50,
-        verbose_name='پردازنده گرافیکی'
-    )
-    camera_resolution = models.IntegerField(
-        verbose_name='رزولوشن دوربین'
-    )
-    software = models.CharField(
-        max_length=50,
-        verbose_name='سیستم عامل'
-    )
-    battery = models.CharField(
-        max_length=50,
-        verbose_name='باطری'
-    )
-    release_date = models.CharField(
-        max_length=50,
-        verbose_name='تاریخ عرضه'
-    )
+    # size = models.CharField(
+    #     max_length=50,
+    #     verbose_name='ابعاد'
+    # )
+    # weight = models.FloatField(
+    #     verbose_name='وزن'
+    # )
+    # screen_size = models.CharField(
+    #     max_length=50,
+    #     verbose_name='سایز صفحه نمایش'
+    # )
+    # cpu = models.CharField(
+    #     max_length=50,
+    #     verbose_name='پردازنده'
+    # )
+    # gpu = models.CharField(
+    #     max_length=50,
+    #     verbose_name='پردازنده گرافیکی'
+    # )
+    # camera_resolution = models.IntegerField(
+    #     verbose_name='رزولوشن دوربین'
+    # )
+    # software = models.CharField(
+    #     max_length=50,
+    #     verbose_name='سیستم عامل'
+    # )
+    # battery = models.CharField(
+    #     max_length=50,
+    #     verbose_name='باطری'
+    # )
+    # release_date = models.CharField(
+    #     max_length=50,
+    #     verbose_name='تاریخ عرضه'
+    # )
     quantity = models.IntegerField(default=1, verbose_name='موجودی')
     description = models.TextField(
         verbose_name='توضیحات اصلی',
@@ -184,6 +184,36 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('product_detail_view', kwargs={'slug': self.slug})
+
+
+class ProductDetail(models.Model):
+    category = models.ForeignKey("ProductCategory", on_delete=models.CASCADE, verbose_name="دسته بندی مربوطه")
+    key = models.CharField(max_length=255,db_index=True, verbose_name="مقدار کلید")
+
+    class Meta:
+        verbose_name = "جزییات محصول"
+        verbose_name_plural = "جزییات محصولات"
+        # indexes = ["key"]
+
+    def __str__(self):
+        return f"{self.category.title} => {self.key}"
+
+
+class ProductDetailValue(models.Model):
+    product_detail = models.ForeignKey("ProductDetail", on_delete=models.CASCADE,
+                                       related_name="product_detail_attributes", verbose_name="جزییات مربوطه")
+    product = models.ForeignKey("Product", on_delete=models.CASCADE, related_name="product_attributes",
+                                verbose_name="محصول مربوطه")
+    value = models.CharField(max_length=255,db_index=True, verbose_name="مقدار")
+
+    class Meta:
+        verbose_name = "مقدار جزییات محصول"
+        verbose_name_plural = "مقدار جزییات محصولات"
+        # indexes = ["value"]
+        ordering = ["product_detail__key"]
+
+    def __str__(self):
+        return f"{self.product_detail} => {self.value}"
 
 
 class ProductVisit(models.Model):
