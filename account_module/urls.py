@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -10,4 +10,5 @@ urlpatterns = [
     path('user-panel/edit-password/', views.EditUserPasswordView.as_view(), name='edit_user_password_view'),
     path('order-history/', views.OrderHistoryView.as_view(), name='order_history_view'),
     path('order-history/pdf/<int:order_id>/', views.OrderHistoryExportView.as_view(), name='order_history_export_view'),
+    path('api/v1/', include('account_module.api.v1.urls')),
 ]
