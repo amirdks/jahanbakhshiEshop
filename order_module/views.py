@@ -11,6 +11,7 @@ from django.views import View
 
 from order_module.forms import ShipmentForm
 from order_module.models import Order, OrderDetail, Shipment
+from order_module.valid_order import is_valid_add_to_order
 from product_module.models import Product, ProductCoupon
 from site_module.models import Province, City
 
@@ -40,7 +41,7 @@ class CartView(LoginRequiredMixin, View):
         if request_type == 'coupon':
             order = Order.objects.get(is_paid=False, user_id=request.user.id)
             order_coupon = ProductCoupon.objects.filter(coupon_code__exact=request.POST.get('coupon_code'),
-                                                        expires_date__gte=datetime.datetime.now())
+                                                        expires_date__gte=datetime.datetime.now(tz=datetime.timezone.utc))
             if order_coupon.exists():
                 order.discount = order_coupon.first()
                 order.save()
@@ -90,31 +91,10 @@ def add_product_to_order(request: HttpRequest):
         })
 
     if request.user.is_authenticated:
-        product = Product.objects.filter(id=product_id, is_active=True, is_delete=False).first()
-        if product is not None and product.quantity > 0:
-            current_order, created = Order.objects.get_or_create(is_paid=False, user_id=request.user.id)
-            current_order_detail = current_order.orderdetail_set.filter(product_id=product_id).first()
-            if current_order_detail is not None:
-                current_order_detail.count += count
-                current_order_detail.save()
-            else:
-                new_detail = OrderDetail(order_id=current_order.id, product_id=product_id, count=count)
-                new_detail.save()
-
-            return JsonResponse({
-                'status': 'success',
-                'message': 'محصول مورد نظر با موفقیت به سبد خرید شما اضافه شد',
-            })
-        else:
-            return JsonResponse({
-                'status': 'not_found',
-                'message': 'محصول مورد نظر یافت نشد',
-            })
+        res = is_valid_add_to_order(request, product_id, count)
+        return JsonResponse({'status': res["view_status"], "message": res["res"]["detail"]})
     else:
-        return JsonResponse({
-            'status': 'error',
-            'message': 'برای افزودن محصول به سبد خرید ابتدا می بایست وارد سایت شوید',
-        })
+        return JsonResponse({'status': "error", "message": "لطفا ابتدا لاگین کنید"})
 
 
 class ShipmentView(LoginRequiredMixin, View):

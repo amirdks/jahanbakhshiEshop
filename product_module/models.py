@@ -83,8 +83,10 @@ class Product(models.Model):
         max_length=300,
         verbose_name='نام محصول'
     )
-    category = models.ManyToManyField(
+    category = models.ForeignKey(
         'ProductCategory',
+        on_delete=models.SET_NULL,
+        null=True,
         related_name='product_categories',
         verbose_name='دسته بندی ها'
     )
