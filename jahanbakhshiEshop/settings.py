@@ -173,6 +173,7 @@ REDIS_DB = 1
 # CACHE_TTL = 600
 # corsheader confi
 CORS_ORIGIN_ALLOW_ALL = True
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', "http://127.0.0.1:3000"]
 
 # Django Rest Framework Confi
 REST_FRAMEWORK = {
@@ -198,8 +199,10 @@ if not DEBUG:
 
 # json web token configs
 SIMPLE_JWT = {
+    # "ACCESS_TOKEN_LIFETIME": timedelta(seconds=5),
     "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    # "REFRESH_TOKEN_LIFETIME": timedelta(seconds=10),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": False,

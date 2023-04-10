@@ -5,12 +5,13 @@ from product_module.models import *
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    # image = serializers.ImageField(max_length=None, allow_empty_file=False, use_url=True, required=False)
     image = serializers.ImageField(max_length=None, allow_empty_file=False, use_url=True, required=False)
-    votes_avg = serializers.IntegerField(source="vote_avg")
+    votes_avg = serializers.IntegerField(source="vote_avg", read_only=True)
     # category = serializers.SlugRelatedField(many=False, read_only=False, slug_field="title",
     #                                         queryset=ProductCategory.objects.all())
-    brand = serializers.CharField(source="brand.title", read_only=True)
-    category = serializers.CharField(source="category.title", read_only=True)
+    # brand = serializers.CharField(source="brand.title", read_only=True)
+    # category = serializers.CharField(source="category.title", read_only=True)
     gallery = serializers.SerializerMethodField(method_name="get_galley")
 
     def to_representation(self, instance: Product):
@@ -46,7 +47,7 @@ class ProductCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductCategory
-        fields = ["title", "slug", "is_active", "is_delete", "children"]
+        fields = ["id", "title", "slug", "is_active", "is_delete", "children"]
 
     def get_children(self, obj):
         categories = {}
@@ -59,3 +60,11 @@ class ProductBrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductBrand
         fields = "__all__"
+
+
+class ProductImageUploadSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField()
+
+    # class Meta:
+    #     model = Image
+    #     fields = ('id', 'image',)
