@@ -22,6 +22,7 @@ django-filter==23.1
 django-jalali-date==1.0.1
 django-model-utils==4.3.1
 django-render-partial==0.4
+django-templated-mail==1.1.1
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.2.2
 drf-spectacular==0.26.1
