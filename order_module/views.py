@@ -98,14 +98,15 @@ def add_product_to_order(request: HttpRequest):
 
 
 class ShipmentView(LoginRequiredMixin, View):
-    current_order = Order.objects.prefetch_related('orderdetail_set').filter(is_paid=False).first()
 
     def get(self, request):
-        if not self.current_order.orderdetail_set.first():
+        current_order = Order.objects.prefetch_related('orderdetail_set').filter(is_paid=False).first()
+        if not current_order.orderdetail_set.first():
             return HttpResponseForbidden("ابتدا باید محصولی را به سبد خرید خود اضافه کنید")
         return render(request, 'order_module/shipment.html')
 
     def post(self, request):
+        current_order = Order.objects.prefetch_related('orderdetail_set').filter(is_paid=False).first()
         form = ShipmentForm(request.POST)
         if form.is_valid():
             province = form.cleaned_data.pop("province")
@@ -119,8 +120,8 @@ class ShipmentView(LoginRequiredMixin, View):
 
             created_shipment = Shipment.objects.create(**form.cleaned_data, province_id=db_province.id,
                                                        city_id=db_city.id, user_id=request.user.id)
-            self.current_order.shipment_id = created_shipment.id
-            self.current_order.save()
+            current_order.shipment_id = created_shipment.id
+            current_order.save()
             return redirect(reverse('cart_view'))
         else:
             error = 'مشکلی رخ داد'

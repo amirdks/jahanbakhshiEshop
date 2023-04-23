@@ -89,9 +89,9 @@ class OrderAddAPIView(GenericAPIView):
 class ShipmentAPIView(GenericAPIView):
     serializer_class = ShipmentSerializer
     permission_classes = [IsAuthenticated]
-    current_order = Order.objects.prefetch_related('orderdetail_set').filter(is_paid=False).first()
 
     def post(self, request):
+        current_order = Order.objects.prefetch_related('orderdetail_set').filter(is_paid=False).first()
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         province = serializer.validated_data.pop("province")
@@ -104,6 +104,6 @@ class ShipmentAPIView(GenericAPIView):
 
         created_shipment = Shipment.objects.create(**serializer.validated_data, province_id=db_province.id,
                                                    city_id=db_city.id, user_id=request.user.id)
-        self.current_order.shipment_id = created_shipment.id
-        self.current_order.save()
+        current_order.shipment_id = created_shipment.id
+        current_order.save()
         return Response({"detail": "با موفقیت اطلاعات گیرنده ثبت شد"}, status=status.HTTP_201_CREATED)
