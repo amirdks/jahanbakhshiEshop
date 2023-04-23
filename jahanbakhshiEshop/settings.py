@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -41,7 +41,13 @@ THIRD_PARTY_APPS = [
     'sorl.thumbnail',
     'jalali_date',
     'django_render_partial',
-    # 'corsheaders',
+    'corsheaders',
+    "rest_framework",
+    'drf_yasg',
+    'rest_framework_simplejwt',
+    'rest_framework.authtoken',
+    'django_filters',
+    'drf_spectacular',
 ]
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -57,7 +63,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # "corsheaders.middleware.CorsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -166,4 +172,43 @@ REDIS_DB = 1
 # }
 # CACHE_TTL = 600
 # corsheader confi
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', "http://127.0.0.1:3000"]
+
+# Django Rest Framework Confi
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+}
+if not DEBUG:
+    REST_FRAMEWORK.update(
+        {
+            "DEFAULT_RENDERER_CLASSES": (
+                "rest_framework.renderers.JSONRenderer",
+            )
+        }
+    )
+
+# json web token configs
+SIMPLE_JWT = {
+    # "ACCESS_TOKEN_LIFETIME": timedelta(seconds=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    # "REFRESH_TOKEN_LIFETIME": timedelta(seconds=10),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": False,
+    "UPDATE_LAST_LOGIN": False,
+}
+
+# Email Configurations for development
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_HOST = "localhost"
+EMAIL_PORT = 1025

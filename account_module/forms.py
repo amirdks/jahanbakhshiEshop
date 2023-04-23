@@ -41,19 +41,19 @@ class LoginForm(forms.Form):
 class EditUserInfoForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'avatar', 'address']
+        fields = ['first_name', 'last_name', 'avatar']
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control mb-3', 'placeholder': 'نام ...'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control mb-3', 'placeholder': 'نام خانوادگی ...'}),
             'avatar': forms.FileInput(
                 attrs={'class': 'form-control-file mb-3 btn btn-info', 'accept': 'image/png, image/gif, image/jpeg'}),
-            'address': forms.Textarea(attrs={'class': 'form-control mb-3', 'rows': '5', 'placeholder': 'آدرس ...'})
+            # 'address': forms.Textarea(attrs={'class': 'form-control mb-3', 'rows': '5', 'placeholder': 'آدرس ...'})
         }
         labels = {
             'first_name': 'نام خود را وارد کنید',
             'last_name': 'نام خانوادگی خود را وارد کنید',
             'avatar': 'تصویر آواتار خود را انتخاب کنید',
-            'address': 'آدرس خود را وارد کنید',
+            # 'address': 'آدرس خود را وارد کنید',
         }
 
 

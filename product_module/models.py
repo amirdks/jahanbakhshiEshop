@@ -3,6 +3,8 @@ from django.db import models
 
 # Create your models here.
 from django.db.models import Avg
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.text import slugify
 
@@ -62,6 +64,7 @@ class ProductBrand(models.Model):
         default='',
         blank=True,
         null=True,
+        unique=True,
         max_length=300,
         verbose_name='نام در url',
         db_index=True
@@ -83,8 +86,10 @@ class Product(models.Model):
         max_length=300,
         verbose_name='نام محصول'
     )
-    category = models.ManyToManyField(
+    category = models.ForeignKey(
         'ProductCategory',
+        on_delete=models.SET_NULL,
+        null=True,
         related_name='product_categories',
         verbose_name='دسته بندی ها'
     )
@@ -155,7 +160,8 @@ class Product(models.Model):
         verbose_name='فعال / غیرفعال'
     )
     is_delete = models.BooleanField(
-        verbose_name='حذف شده / نشده'
+        verbose_name='حذف شده / نشده',
+        default=False
     )
     created_date = models.DateTimeField(
         auto_now_add=True,
@@ -172,10 +178,12 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
-    def save(self, *args, **kwargs):  # new
-        if not self.slug:
-            self.slug = unique_slug_generator(self)
-        return super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     print(self.id)
+    #     if not self.slug:
+    #         self.slug = unique_slug_generator(self)
+    #         print(self.slug)
+    #     return super().save(*args, **kwargs)
 
     def vote_avg(self):
         if self.productvote_set.first():
@@ -188,7 +196,7 @@ class Product(models.Model):
 
 class ProductDetail(models.Model):
     category = models.ForeignKey("ProductCategory", on_delete=models.CASCADE, verbose_name="دسته بندی مربوطه")
-    key = models.CharField(max_length=255,db_index=True, verbose_name="مقدار کلید")
+    key = models.CharField(max_length=255, db_index=True, verbose_name="مقدار کلید")
 
     class Meta:
         verbose_name = "جزییات محصول"
@@ -204,7 +212,7 @@ class ProductDetailValue(models.Model):
                                        related_name="product_detail_attributes", verbose_name="جزییات مربوطه")
     product = models.ForeignKey("Product", on_delete=models.CASCADE, related_name="product_attributes",
                                 verbose_name="محصول مربوطه")
-    value = models.CharField(max_length=255,db_index=True, verbose_name="مقدار")
+    value = models.CharField(max_length=255, db_index=True, verbose_name="مقدار")
 
     class Meta:
         verbose_name = "مقدار جزییات محصول"
@@ -339,3 +347,11 @@ class ProductCoupon(models.Model):
 class TestDownload(models.Model):
     image = models.ImageField(upload_to='images/')
     file = models.FileField(upload_to='files/')
+
+
+@receiver(post_save, sender=Product)
+def save_profile(sender, instance, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)
+        instance.save()
+    pass

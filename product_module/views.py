@@ -62,7 +62,7 @@ class ProductDetailView(DetailView):
                                                                                     orderdetail__product_id=product.id)
         context['related_products'] = Product.objects.filter(
             Q(brand__title__iexact=product.brand.title) | Q(
-                category__title__iexact=product.category.first().title)).exclude(id=product.id)
+                category__title__iexact=product.category.title)).exclude(id=product.id)
         # recommender = Recommender()
         # context['related_products'] = recommender.suggest_products_for([product], 6)
         if self.request.user.is_authenticated:

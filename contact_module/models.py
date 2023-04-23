@@ -18,6 +18,7 @@ class ContactUs(models.Model):
         return self.full_name
 
 
+
 class ContactUsResponse(models.Model):
     contact = models.ForeignKey('ContactUs', on_delete=models.CASCADE, related_name='contact_us_response',
                                 verbose_name='مربوط به پیام')

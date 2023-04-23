@@ -104,6 +104,37 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="item">
+                                <div onclick="goToDetailPage('{{ products.get_absolute_url }}')" style="direction:rtl;"
+                                     class="purchase-item">
+                                    <div class="purchase-header">
+                                        {% thumbnail products.image "300x300" qulity="95" crop="center" as im %}
+                                            <img alt="{{ products.title }}" src="{{ im.url }}">
+                                        {% endthumbnail %}
+                                    </div>
+                                    <span class="hot-offer">پیشنهاد ویژه</span>
+                                    <div class="purchase-text">
+                                        {{ products.title }}
+                                    </div>
+                                    <div class="purchase-button">
+                                        <button class="addtocart">
+                                            <div class="pretext">
+                                                <i class="fas fa-cart-plus"></i> افزودن به سبد خرید
+                                            </div>
+
+                                            <div class="pretext done">
+                                                <div class="posttext"><i class="fas fa-check"></i> اوکبه</div>
+                                            </div>
+
+                                        </button>
+                                    </div>
+                                    <div class="purchase-footer">
+                                        <div class="right">{{ products.price|three_digits_currency }}</div>
+                                        <div class="left"><span> {{ products.vote_avg }} </span><i
+                                                class="fa-solid fa-star"></i></div>
+                                    </div>
+                                </div>
+                            </div>
                         {% endfor %}
                     </div>
                 </div>
