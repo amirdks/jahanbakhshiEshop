@@ -4,14 +4,12 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse, JsonResponse, FileResponse
 from django.shortcuts import render
-
 # Create your views here.
-from django.views.generic import ListView, View, DetailView
+from django.views.generic import View, DetailView
 
 from order_module.models import Order
 from product_module.models import Product, ProductBrand, ProductGallery, ProductComment, ProductVote, ProductCategory, \
     TestDownload
-from product_module.recommender import Recommender
 
 
 class ProductListView(View):
