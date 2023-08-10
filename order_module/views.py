@@ -115,7 +115,7 @@ class ShipmentView(LoginRequiredMixin, View):
                 db_province = Province.objects.get(name=province)
                 db_city = City.objects.get(name=city)
             except (Province.DoesNotExist, City.DoesNotExist) as e:
-                return render(request, 'order_module/shipment.html',
+                return render(request, 'or0der_module/shipment.html',
                               context={"error": "شهر یا استان انتخاب شده معتبر نمیباشد", "error_field": "none_field"})
 
             created_shipment = Shipment.objects.create(**form.cleaned_data, province_id=db_province.id,
